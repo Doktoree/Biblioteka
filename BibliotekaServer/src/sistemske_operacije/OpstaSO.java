@@ -12,7 +12,7 @@ import db.DbBroker;
  */
 public abstract class OpstaSO {
 
-public final void executeOperation() throws Exception {
+    public final void executeOperation() throws Exception {
         try {
             DbBroker.getInstanca().uspostaviKonekciju();
             executeSpecificOperation();
@@ -25,7 +25,5 @@ public final void executeOperation() throws Exception {
     }
 
     protected abstract void executeSpecificOperation() throws Exception;
-    
-    
-}
 
+}

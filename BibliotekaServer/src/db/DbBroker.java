@@ -4,19 +4,19 @@
  */
 package db;
 
-
 import config.Config;
 import domen.OpstiDomenskiObjekat;
 import java.sql.*;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 /**
  *
  * @author Lav
  */
 public class DbBroker {
-    
+
     private static DbBroker instanca;
     private Connection connection;
 
@@ -24,14 +24,14 @@ public class DbBroker {
     }
 
     public static DbBroker getInstanca() {
-        if(instanca == null){
+        if (instanca == null) {
             instanca = new DbBroker();
         }
         return instanca;
     }
-    
-    public boolean uspostaviKonekciju(){
-        
+
+    public boolean uspostaviKonekciju() {
+
         try {
             Class.forName("com.mysql.jdbc.Driver");
             System.out.println("Drajver ucitan!");
@@ -49,47 +49,44 @@ public class DbBroker {
             System.out.println("Nije uspelo konektovanje sa bazom!");
             return false;
         }
-        
-     
+
     }
-    
-    
-    public void zatvoriKonekciju(){
-        
+
+    public void zatvoriKonekciju() {
+
         try {
             connection.close();
             System.out.println("Konekcija je zatvorena!");
         } catch (SQLException ex) {
             System.out.println("Konekcija ne moze da se zatvori!");
         }
-        
+
     }
-    
-    public void commit(){
-        
+
+    public void commit() {
+
         try {
             connection.commit();
             System.out.println("Commit je izvrsen!");
         } catch (SQLException ex) {
             System.out.println("Commit ne moze da se izvrsi!");
         }
-        
+
     }
-    
-    public void rollback(){
-        
+
+    public void rollback() {
+
         try {
             connection.rollback();
             System.out.println("Rollback je izvrsen!");
         } catch (SQLException ex) {
             System.out.println("Rollback ne moze da se izvrsi!");
         }
-        
+
     }
-    
-    public synchronized List<OpstiDomenskiObjekat> vratiOpsteDomenskeObjekte(OpstiDomenskiObjekat o) throws SQLException{
-        
-        
+
+    public synchronized List<OpstiDomenskiObjekat> vratiOpsteDomenskeObjekte(OpstiDomenskiObjekat o) throws SQLException {
+
         try {
             String query = "SELECT * FROM " + o.getNazivTabele();
             Statement statement = connection.createStatement();
@@ -98,14 +95,68 @@ public class DbBroker {
             statement.close();
             System.out.println("ResultSet uspesno postavljen!");
             return lista;
-            
+
         } catch (SQLException ex) {
             System.out.println("Greska u postavljanju ResultSet-a na klasu " + o.getNazivTabele());
             ex.printStackTrace();
             throw ex;
         }
-        
-        
+
     }
-    
+
+    public synchronized boolean sacuvajOpstiDomenskiObjekat(OpstiDomenskiObjekat o) throws SQLException {
+
+        String query = "INSERT INTO " + o.getNazivTabele() + "(" + o.getNaziveParametara() + ") VALUES("
+                + o.getParametre() + ")";
+        try {
+            Statement statement = connection.createStatement();
+            int a = statement.executeUpdate(query);
+            return true;
+        } catch (SQLException ex) {
+            System.out.println("Objekat ne moze da se sacuva!");
+            throw ex;
+        }
+
+    }
+
+    public synchronized OpstiDomenskiObjekat vratiOpstiDomenskiObjekatPrimarniKljuc(OpstiDomenskiObjekat o, long id) throws SQLException {
+
+        String query = "";
+        if (o.getSlozeniPrimarniKljuc() == null) {
+            query = "SELECT * FROM " + o.getNazivTabele() + "WHERE " + o.getNazivPrimarnogKljuca() + "=" + id;
+        } else {
+            query = "SELECT * FROM " + o.getNazivTabele() + "WHERE " + o.getSlozeniPrimarniKljuc();
+
+        }
+
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery(query);
+        List<OpstiDomenskiObjekat> lista = o.konvertujRSUListu(rs);
+        return lista.get(0);
+
+    }
+
+    public synchronized boolean obrisiOpstiDomenskiObjekat(OpstiDomenskiObjekat o) throws SQLException {
+
+        try {
+            String query = "";
+
+            if (o.getSlozeniPrimarniKljuc() == null) {
+                query = "DELETE FROM " + o.getNazivTabele() + "WHERE " + o.getNazivPrimarnogKljuca() + "=" + o.getVrednostPrimarnogKljuca();
+
+            } else {
+                query = "DELETE FROM " + o.getNazivTabele() + "WHERE " + o.getSlozeniPrimarniKljuc();
+
+            }
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(query);
+            commit();
+            return true;
+        } catch (Exception e) {
+
+            System.out.println("Ne moze da se izvrsi brisanje Opsteg domenskog objekta!");
+            throw e;
+        }
+
+    }
 }
