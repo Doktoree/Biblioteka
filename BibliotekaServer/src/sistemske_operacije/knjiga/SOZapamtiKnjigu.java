@@ -2,44 +2,36 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sistemske_operacije.zaduzenje;
+package sistemske_operacije.knjiga;
 
-import domen.Zaduzenje;
+import db.DbBroker;
+import domen.Knjiga;
 import sistemske_operacije.OpstaSO;
 
 /**
  *
  * @author Lav
  */
-public class SOKreirajZaduzenje extends OpstaSO {
-
-    Zaduzenje zaduzenje;
+public class SOZapamtiKnjigu extends OpstaSO{
+    
+    Knjiga knjiga;
     boolean uspesno;
-
-    public SOKreirajZaduzenje() {
+    
+    public SOZapamtiKnjigu(Knjiga knjiga) {
+        this.knjiga = knjiga;
         uspesno = false;
     }
 
-    
-    
     @Override
     protected void executeSpecificOperation() throws Exception {
         
-        zaduzenje = new Zaduzenje();
-        uspesno = true;
+        uspesno = DbBroker.getInstanca().sacuvajOpstiDomenskiObjekat(knjiga);
         
-        
-    }
-
-    public Zaduzenje getZaduzenje() {
-        return zaduzenje;
     }
 
     public boolean isUspesno() {
         return uspesno;
     }
-    
-    
     
     
     

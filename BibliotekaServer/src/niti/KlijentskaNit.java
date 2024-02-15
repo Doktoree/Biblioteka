@@ -4,13 +4,21 @@
  */
 package niti;
 
+import domen.Beletristika;
+import domen.Knjiga;
+import domen.StrucnaLiteratura;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import konstante.Operacija;
+import logika.Kontroler;
+import sistemske_operacije.knjiga.SONadjiKnjige;
+import sistemske_operacije.knjiga.SOUcitajKnjigu;
 import transfer.Odgovor;
 import transfer.Zahtev;
 
@@ -35,13 +43,19 @@ public class KlijentskaNit extends Thread {
     @Override
     public void run() {
         
-        izvrsiOperaciju();
+        try {
+            izvrsiOperaciju();
+        } catch (SQLException ex) {
+            Logger.getLogger(KlijentskaNit.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(KlijentskaNit.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         
     }
 
     
-    public void izvrsiOperaciju(){
+    public void izvrsiOperaciju() throws SQLException, Exception{
         
         while(flag){
             
@@ -50,6 +64,34 @@ public class KlijentskaNit extends Thread {
             Operacija operacija = zahtev.getOperacija();
             
             switch (operacija) {
+                
+                case VRATI_KNJIGE:
+                    Knjiga k = (Knjiga) zahtev.getParametar();
+                    List<Knjiga> knjige = Kontroler.getInstanca().vratiKnjige(k);
+                    SONadjiKnjige nadji = new SONadjiKnjige(k, knjige);
+                    nadji.executeOperation();
+                    List<Knjiga> rezultat = nadji.getRezultat();
+                    odgovor.setOdgovor(rezultat);
+                    break;
+                    
+                case VRATI_DETALJE_KNJIGE:
+                    Knjiga ko = (Knjiga) zahtev.getParametar();
+                    SOUcitajKnjigu ucitaj = new SOUcitajKnjigu(ko);
+                    ucitaj.executeOperation();
+                    Beletristika bele;
+                    StrucnaLiteratura strucna;
+                    System.out.println("**********************");
+                    if(ucitaj.isJeBeletristika()){
+                        bele = (Beletristika) ucitaj.getRezultat();
+                        odgovor.setOdgovor(bele);
+                        System.out.println("---------------------------------");
+                    }
+                    else{
+                        strucna = (StrucnaLiteratura) ucitaj.getRezultat();
+                        odgovor.setOdgovor(strucna);
+                        System.out.println("1---------------------------------");
+                    }
+                    break;
                 
             }
             

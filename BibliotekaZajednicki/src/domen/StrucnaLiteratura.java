@@ -86,8 +86,8 @@ public class StrucnaLiteratura extends OpstiDomenskiObjekat {
                 Long sifra = rs.getLong("sifra_knjige");
                 Knjiga kn = new Knjiga(sifra);
                 String naucna = rs.getString("naucna_oblast");
-
-                StrucnaLiteratura strucna = new StrucnaLiteratura(knjiga, naucnaOblast);
+               
+                StrucnaLiteratura strucna = new StrucnaLiteratura(knjiga, naucna);
 
                 lista.add(strucna);
             }

@@ -5,7 +5,9 @@
 package db;
 
 import config.Config;
+import domen.Beletristika;
 import domen.OpstiDomenskiObjekat;
+import domen.StrucnaLiteratura;
 import java.sql.*;
 import java.util.List;
 import java.util.logging.Level;
@@ -33,7 +35,7 @@ public class DbBroker {
     public boolean uspostaviKonekciju() {
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             System.out.println("Drajver ucitan!");
             String url = Config.getInstanca().getDbUrl();
             String username = Config.getInstanca().getUsername();
@@ -123,15 +125,18 @@ public class DbBroker {
 
         String query = "";
         if (o.getSlozeniPrimarniKljuc() == null) {
-            query = "SELECT * FROM " + o.getNazivTabele() + "WHERE " + o.getNazivPrimarnogKljuca() + "=" + id;
+            query = "SELECT * FROM " + o.getNazivTabele() + " WHERE " + o.getNazivPrimarnogKljuca() + "=" + id;
         } else {
-            query = "SELECT * FROM " + o.getNazivTabele() + "WHERE " + o.getSlozeniPrimarniKljuc();
+            query = "SELECT * FROM " + o.getNazivTabele() + " WHERE " + o.getSlozeniPrimarniKljuc();
 
         }
 
         Statement statement = connection.createStatement();
+        System.out.println("|||||||||||||||||||||||: " + query);
         ResultSet rs = statement.executeQuery(query);
+
         List<OpstiDomenskiObjekat> lista = o.konvertujRSUListu(rs);
+
         return lista.get(0);
 
     }
@@ -159,4 +164,26 @@ public class DbBroker {
         }
 
     }
+
+    public synchronized boolean vratiTipKnjige(long id) {
+
+        String query1 = "SELECT * FROM beletristika WHERE sifra_knjige = " + id;
+
+        try {
+            OpstiDomenskiObjekat ob = new Beletristika();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query1);
+            List<OpstiDomenskiObjekat> lista = ob.konvertujRSUListu(rs);
+            if (lista.isEmpty()) {
+                return false;
+            }
+            System.out.println("**********Uspelo");
+            return true;
+        } catch (SQLException ex) {
+            System.out.println("********** Nije uspelo");
+            return false;
+        }
+
+    }
+
 }

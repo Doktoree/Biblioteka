@@ -21,8 +21,9 @@ public class Knjiga extends OpstiDomenskiObjekat {
     private Long sifraKnjige;
     private String nazivKnjige;
     private String autorKnjige;
-    private LocalDate datumIzdavanja;
-
+    private int godina;
+    private boolean jeZauzeta;
+    
     public Knjiga() {
     }
     
@@ -30,19 +31,20 @@ public class Knjiga extends OpstiDomenskiObjekat {
         this.sifraKnjige = sifraKnjige;
     }
 
-    public Knjiga(Long sifraKnjige, String nazivKnjige, String autorKnjige, LocalDate datumIzdavanja) {
+    public Knjiga(Long sifraKnjige, String nazivKnjige, String autorKnjige, int godina,boolean jeZauzeta) {
         this.sifraKnjige = sifraKnjige;
         this.nazivKnjige = nazivKnjige;
         this.autorKnjige = autorKnjige;
-        this.datumIzdavanja = datumIzdavanja;
+        this.godina = godina;
+        this.jeZauzeta = jeZauzeta;
     }
 
-    public LocalDate getDatumIzdavanja() {
-        return datumIzdavanja;
+    public int getGodina() {
+        return godina;
     }
 
-    public void setDatumIzdavanja(LocalDate datumIzdavanja) {
-        this.datumIzdavanja = datumIzdavanja;
+    public void setDatumIzdavanja(int godina) {
+        this.godina = godina;
     }
 
     public Long getSifraKnjige() {
@@ -68,6 +70,8 @@ public class Knjiga extends OpstiDomenskiObjekat {
     public void setAutorKnjige(String autorKnjige) {
         this.autorKnjige = autorKnjige;
     }
+    
+    
 
     @Override
     public String getNazivTabele() {
@@ -76,12 +80,12 @@ public class Knjiga extends OpstiDomenskiObjekat {
 
     @Override
     public String getParametre() {
-        return String.format("%s, '%s', '%s', '%s'", sifraKnjige, nazivKnjige, autorKnjige, datumIzdavanja);
+        return String.format("%s, '%s', '%s', %s, %s", sifraKnjige, nazivKnjige, autorKnjige, godina,jeZauzeta);
     }
 
     @Override
     public String getNaziveParametara() {
-        return "sifra_knjige, naziv_knjige, autor_knjige, datum_izdavanja";
+        return "sifra_knjige, naziv_knjige, autor_knjige, datum_izdavanja, je_zauzeta";
     }
 
     @Override
@@ -105,9 +109,9 @@ public class Knjiga extends OpstiDomenskiObjekat {
                 Long sifra = rs.getLong("sifra_knjige");
                 String naziv = rs.getString("naziv_knjige");
                 String autor = rs.getString("autor_knjige");
-                LocalDate datum = rs.getDate("datum_izdavanja").toLocalDate();
-
-                Knjiga knjiga = new Knjiga(sifraKnjige, nazivKnjige, autorKnjige, datumIzdavanja);
+                int godina = rs.getInt("datum_izdavanja");
+                boolean zauzeta = rs.getBoolean("je_zauzeta");
+                Knjiga knjiga = new Knjiga(sifra, naziv, autor, godina,zauzeta);
                 lista.add(knjiga);
 
             }
@@ -123,7 +127,7 @@ public class Knjiga extends OpstiDomenskiObjekat {
     public String getUpdateUpit() {
         
        return "sifra_knjige = " + sifraKnjige + "naziv_knjige = '" + nazivKnjige + "'" + "autor_knjige = '" + autorKnjige + "'"
-                + "datum_izdavanja = '" + datumIzdavanja + "'";
+                + "datum_izdavanja = '" + godina + "'" + "je_zauzeta = " + jeZauzeta;
         
     }
 
@@ -136,7 +140,7 @@ public class Knjiga extends OpstiDomenskiObjekat {
     public String toString() {
         
         return "sifra knjige: " + sifraKnjige + " naziv knjige: " + nazivKnjige + " autor knjige: " + autorKnjige + 
-                " datum izdavanja: " + datumIzdavanja;
+                " datum izdavanja: " + godina + " jeZauzeta = " + jeZauzeta;
         
     }
     
@@ -162,6 +166,14 @@ public class Knjiga extends OpstiDomenskiObjekat {
             return false;
         }
         return true;
+    }
+
+    public boolean isJeZauzeta() {
+        return jeZauzeta;
+    }
+
+    public void setJeZauzeta(boolean jeZauzeta) {
+        this.jeZauzeta = jeZauzeta;
     }
 
 }

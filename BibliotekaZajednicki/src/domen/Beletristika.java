@@ -109,7 +109,7 @@ public class Beletristika extends OpstiDomenskiObjekat {
                 String nagrade = rs.getString("osvojene_nagrade");
                 Knjiga knj = new Knjiga(sifra);
                 
-                Beletristika be = new Beletristika(knj, zanr, tema, osvojeneNagrade);
+                Beletristika be = new Beletristika(knj, zanr, tema, nagrade);
                 
                 lista.add(be);
             }

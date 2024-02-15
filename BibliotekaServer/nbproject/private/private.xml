@@ -6,16 +6,23 @@
             <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/sistemske_operacije/clan/SOKreirajClana.java</file>
             <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/db/DbBroker.java</file>
             <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/sistemske_operacije/zaduzenje/SOKreirajZaduzenje.java</file>
+            <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/sistemske_operacije/knjiga/SOUcitajKnjigu.java</file>
+            <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/niti/KlijentskaNit.java</file>
+            <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/sistemske_operacije/knjiga/SOZapamtiKnjigu.java</file>
             <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/sistemske_operacije/zaduzenje/SOUcitajZaduzenje.java</file>
             <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/sistemske_operacije/zaduzenje/SOUcitajListuKnjiga.java</file>
+            <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/sistemske_operacije/knjiga/SOKreirajKnjigu.java</file>
             <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/sistemske_operacije/clan/SOObrisiClana.java</file>
             <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/sistemske_operacije/clan/SOZapamtiClana.java</file>
             <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/sistemske_operacije/zaduzenje/SOZapamtiZaduzenje.java</file>
             <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/sistemske_operacije/zaduzenje/SOUcitajListuClanova.java</file>
+            <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/logika/Kontroler.java</file>
             <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/sistemske_operacije/OpstaSO.java</file>
             <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/sistemske_operacije/clan/SOUcitajClana.java</file>
             <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/sistemske_operacije/zaduzenje/SONadjiZaduzenja.java</file>
             <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/sistemske_operacije/clan/SONadjiClanove.java</file>
+            <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/sistemske_operacije/knjiga/SOObrisiKnjigu.java</file>
+            <file>file:/C:/Projekti%20GitHub/Biblioteka/BibliotekaServer/src/sistemske_operacije/knjiga/SONadjiKnjige.java</file>
         </group>
     </open-files>
 </project-private>

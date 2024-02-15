@@ -50,4 +50,10 @@ public class SONadjiZaduzenja extends OpstaSO {
         return false;
     }
 
+    public List<OpstiDomenskiObjekat> getRezultat() {
+        return rezultat;
+    }
+    
+    
+
 }

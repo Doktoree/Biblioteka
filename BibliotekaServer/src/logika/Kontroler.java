@@ -5,8 +5,14 @@
 package logika;
 
 import config.Config;
+import db.DbBroker;
 import domen.Clan;
+import domen.Knjiga;
+import domen.OpstiDomenskiObjekat;
 import forme.ServerskaForma;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import niti.PokretanjeServera;
 import sistemske_operacije.clan.SOKreirajClana;
 import sistemske_operacije.clan.SOZapamtiClana;
@@ -50,6 +56,40 @@ public class Kontroler {
 
     }
 
+    public void uspostaviKonekciju() {
+
+        DbBroker.getInstanca().uspostaviKonekciju();
+
+    }
+
+    public void commit() {
+
+    }
+
+    public List<Knjiga> vratiKnjige(Knjiga knjiga) throws SQLException {
+
+        try {
+            DbBroker.getInstanca().uspostaviKonekciju();
+            List<OpstiDomenskiObjekat> knjige = DbBroker.getInstanca().vratiOpsteDomenskeObjekte(knjiga);
+            List<Knjiga> rezultat = new ArrayList<>();
+
+            for (OpstiDomenskiObjekat o : knjige) {
+
+                Knjiga k = (Knjiga) o;
+                rezultat.add(k);
+
+            }
+            DbBroker.getInstanca().zatvoriKonekciju();
+            return rezultat;
+
+        } catch (Exception e) {
+            DbBroker.getInstanca().rollback();
+            DbBroker.getInstanca().zatvoriKonekciju();
+        }
+
+        return null;
+    }
+
     public boolean kreirajClana() throws Exception {
 
         SOKreirajClana k = new SOKreirajClana();
@@ -57,15 +97,13 @@ public class Kontroler {
         return k.isUspesno();
 
     }
-    
-    public boolean zapamtiClana(Clan clan) throws Exception{
-        
+
+    public boolean zapamtiClana(Clan clan) throws Exception {
+
         SOZapamtiClana z = new SOZapamtiClana(clan);
         z.executeOperation();
         return z.isUspesno();
-        
+
     }
-    
-    
 
 }
