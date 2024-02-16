@@ -4,7 +4,7 @@
  */
 package main;
 
-import forme.PocetnaForma;
+import forme.PretragaKnjigaForma;
 
 /**
  *
@@ -13,7 +13,7 @@ import forme.PocetnaForma;
 public class Main {
     
     public static void main(String[] args) {
-        PocetnaForma pf = new PocetnaForma();
+        PretragaKnjigaForma pf = new PretragaKnjigaForma();
         pf.setVisible(true);
     }
     

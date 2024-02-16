@@ -6,9 +6,11 @@ package db;
 
 import config.Config;
 import domen.Beletristika;
+import domen.Knjiga;
+import domen.Korisnik;
 import domen.OpstiDomenskiObjekat;
-import domen.StrucnaLiteratura;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -147,10 +149,10 @@ public class DbBroker {
             String query = "";
 
             if (o.getSlozeniPrimarniKljuc() == null) {
-                query = "DELETE FROM " + o.getNazivTabele() + "WHERE " + o.getNazivPrimarnogKljuca() + "=" + o.getVrednostPrimarnogKljuca();
-
+                query = "DELETE FROM " + o.getNazivTabele() + " WHERE " + o.getNazivPrimarnogKljuca() + "=" + o.getVrednostPrimarnogKljuca();
+                System.out.println("!!!!!!!!!!!!: " + query);
             } else {
-                query = "DELETE FROM " + o.getNazivTabele() + "WHERE " + o.getSlozeniPrimarniKljuc();
+                query = "DELETE FROM " + o.getNazivTabele() + " WHERE " + o.getSlozeniPrimarniKljuc();
 
             }
             Statement statement = connection.createStatement();
@@ -184,6 +186,75 @@ public class DbBroker {
             return false;
         }
 
+    }
+    
+    public synchronized Korisnik vratiKorisnika(Korisnik korisnik){
+        
+        uspostaviKonekciju();
+        List<OpstiDomenskiObjekat> lista = new ArrayList<>();
+        String query = "SELECT * FROM korisnik WHERE korisnicko_ime = ? AND lozinka = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, korisnik.getKorisnickoIme());
+            ps.setString(2, korisnik.getLozinka());
+            ResultSet rs = ps.executeQuery();
+            lista = korisnik.konvertujRSUListu(rs);
+            Korisnik vrati = (Korisnik) lista.get(0);
+            System.out.println("Izvrsena je provera korisnika!");
+            return vrati;
+        } catch (SQLException ex) {
+            System.out.println("Nije izvrsena provera korisnika!");
+            Logger.getLogger(DbBroker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+    }
+    
+    
+    public synchronized Knjiga vratiKnjiguBezPrimarnog(Knjiga knjiga){
+        
+        uspostaviKonekciju();
+        List<OpstiDomenskiObjekat> lista = new ArrayList<>();
+        String query = "SELECT * FROM knjiga WHERE naziv_knjige = ? AND autor_knjige = ? AND datum_izdavanja = ? AND "
+                + "je_zauzeta = ? ORDER BY sifra_knjige DESC";
+        
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, knjiga.getNazivKnjige());
+            ps.setString(2, knjiga.getAutorKnjige());
+            ps.setInt(3, knjiga.getGodina());
+            ps.setBoolean(4, knjiga.isJeZauzeta());
+            ResultSet rs = ps.executeQuery();
+           
+            lista = knjiga.konvertujRSUListu(rs);
+            
+            return (Knjiga) lista.get(0);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DbBroker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+        
+    }
+    
+    
+    public boolean insertujVrstuKnjige(OpstiDomenskiObjekat o){
+        
+        uspostaviKonekciju();
+        String query = "INSERT INTO " + o.getNazivTabele() + " VALUES(" + o.getParametre() + ")";
+        System.out.println("---------- " + query);
+        try {
+            Statement statement = connection.createStatement();
+            int broj = statement.executeUpdate(query);
+            commit();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(DbBroker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return false;
+        
     }
 
 }

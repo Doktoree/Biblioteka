@@ -6,9 +6,12 @@ package logika;
 
 import config.Config;
 import db.DbBroker;
+import domen.Beletristika;
 import domen.Clan;
 import domen.Knjiga;
+import domen.Korisnik;
 import domen.OpstiDomenskiObjekat;
+import domen.StrucnaLiteratura;
 import forme.ServerskaForma;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,7 +19,7 @@ import java.util.List;
 import niti.PokretanjeServera;
 import sistemske_operacije.clan.SOKreirajClana;
 import sistemske_operacije.clan.SOZapamtiClana;
-
+import sistemske_operacije.knjiga.*;
 /**
  *
  * @author Lav
@@ -104,6 +107,72 @@ public class Kontroler {
         z.executeOperation();
         return z.isUspesno();
 
+    }
+    
+    public Korisnik proveriKorisnika(Korisnik korisnik){
+        
+        return DbBroker.getInstanca().vratiKorisnika(korisnik);
+        
+    }
+    
+    
+    public boolean sacuvajKnjigu(OpstiDomenskiObjekat o) throws Exception{
+        
+        Beletristika bele;
+        StrucnaLiteratura strucna;
+        
+        if(o instanceof Beletristika){
+            
+            bele = (Beletristika) o;
+            Knjiga k = bele.getKnjiga();
+            SOZapamtiKnjigu zapamti = new SOZapamtiKnjigu(k);
+            zapamti.executeOperation();
+            if(zapamti.isUspesno()){
+                System.out.println("Uspelo je cuvanje samo knjige!");
+            }
+            else{
+                System.out.println("Nije uspelo cuvanje samo knjige!");
+            }
+            
+            Knjiga m = DbBroker.getInstanca().vratiKnjiguBezPrimarnog(k);
+            bele.setKnjiga(m);
+            if(DbBroker.getInstanca().insertujVrstuKnjige(bele)){
+                System.out.println("Uspelo je insertovanje knjige!");
+                return true;
+            }
+            else{
+                System.out.println("Nije uspelo insertovanje knjige!");
+            }
+            
+        }
+        
+        else if(o instanceof StrucnaLiteratura){
+            
+            strucna = (StrucnaLiteratura) o;
+            
+            Knjiga k = strucna.getKnjiga();
+            SOZapamtiKnjigu zapamti = new SOZapamtiKnjigu(k);
+            zapamti.executeOperation();
+            if(zapamti.isUspesno()){
+                System.out.println("Uspelo je cuvanje samo knjige!");
+            }
+            else{
+                System.out.println("Nije uspelo cuvanje samo knjige!");
+            }
+            
+            Knjiga m = DbBroker.getInstanca().vratiKnjiguBezPrimarnog(k);
+            strucna.setKnjiga(m);
+            if(DbBroker.getInstanca().insertujVrstuKnjige(strucna)){
+                System.out.println("Uspelo je insertovanje knjige!");
+            }
+            else{
+                System.out.println("Nije uspelo insertovanje knjige!");
+            }
+            
+        }
+         
+        return false;
+        
     }
 
 }

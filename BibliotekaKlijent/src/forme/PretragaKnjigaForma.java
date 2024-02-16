@@ -6,9 +6,10 @@ package forme;
 
 import domen.Beletristika;
 import domen.Knjiga;
+import domen.Korisnik;
 import domen.OpstiDomenskiObjekat;
 import domen.StrucnaLiteratura;
-import java.time.LocalDate;
+import java.awt.Font;
 import java.util.List;
 import logika.Kontroler;
 import modeli.PrikazKnjigaModel;
@@ -17,13 +18,23 @@ import modeli.PrikazKnjigaModel;
  *
  * @author Lav
  */
-public class PocetnaForma extends javax.swing.JFrame {
+public class PretragaKnjigaForma extends javax.swing.JFrame {
 
+    Korisnik korisnik;
     /**
      * Creates new form PocetnaForma
      */
-    public PocetnaForma() {
+    public PretragaKnjigaForma() {
         initComponents();
+    }
+    
+    public PretragaKnjigaForma(Korisnik korisnik) {
+        initComponents();
+        this.korisnik = korisnik;
+        btnPrijava.setVisible(false);
+        lblDobroDosli.setText("Pretraga knjiga");
+        lblDobroDosli.setFont(new Font("Segoe UI",Font.PLAIN,20));
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     /**
@@ -44,8 +55,8 @@ public class PocetnaForma extends javax.swing.JFrame {
         txtNaziv = new javax.swing.JTextField();
         txtAutor = new javax.swing.JTextField();
         txtGodina = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        lblDobroDosli = new javax.swing.JLabel();
+        btnPrijava = new javax.swing.JButton();
         btnPretrazi1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -83,12 +94,17 @@ public class PocetnaForma extends javax.swing.JFrame {
 
         jLabel3.setText("Godina izdavanja:");
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        jLabel4.setText("Dobro došli!");
+        lblDobroDosli.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        lblDobroDosli.setText("Dobro došli!");
 
-        jButton1.setBackground(new java.awt.Color(51, 102, 255));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton1.setText("Prijava");
+        btnPrijava.setBackground(new java.awt.Color(51, 102, 255));
+        btnPrijava.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnPrijava.setText("Prijava");
+        btnPrijava.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrijavaActionPerformed(evt);
+            }
+        });
 
         btnPretrazi1.setText("Detalji");
         btnPretrazi1.addActionListener(new java.awt.event.ActionListener() {
@@ -119,10 +135,10 @@ public class PocetnaForma extends javax.swing.JFrame {
                     .addComponent(btnPretrazi1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnPretrazi, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblDobroDosli, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 134, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnPrijava, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26))
         );
         layout.setVerticalGroup(
@@ -130,8 +146,8 @@ public class PocetnaForma extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnPrijava, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblDobroDosli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -207,6 +223,11 @@ public class PocetnaForma extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnPretrazi1ActionPerformed
 
+    private void btnPrijavaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrijavaActionPerformed
+        // TODO add your handling code here:
+        new LoginForm(this, true).setVisible(true);
+    }//GEN-LAST:event_btnPrijavaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -214,12 +235,12 @@ public class PocetnaForma extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPretrazi;
     private javax.swing.JButton btnPretrazi1;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnPrijava;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel lblDobroDosli;
     private javax.swing.JTable tblTabelaKnjige;
     private javax.swing.JTextField txtAutor;
     private javax.swing.JTextField txtGodina;

@@ -9,6 +9,11 @@ import domen.Knjiga;
 import domen.OpstiDomenskiObjekat;
 import domen.StrucnaLiteratura;
 import java.awt.Color;
+import javax.swing.JOptionPane;
+import konstante.Operacija;
+import logika.Kontroler;
+import transfer.Odgovor;
+import transfer.Zahtev;
 
 /**
  *
@@ -18,6 +23,7 @@ public class DetaljiKnjigeForm extends javax.swing.JDialog {
 
     Knjiga knjiga;
     OpstiDomenskiObjekat o;
+    boolean flag;
 
     /**
      * Creates new form DetaljiKnjigeForm
@@ -28,6 +34,16 @@ public class DetaljiKnjigeForm extends javax.swing.JDialog {
         this.knjiga = knjiga;
         this.o = o;
         popuniPolja();
+        flag = false;
+        btnKreirajKnjigu.setVisible(false);
+
+    }
+
+    public DetaljiKnjigeForm(java.awt.Frame parent, boolean modal, boolean flag) {
+        super(parent, modal);
+        initComponents();
+        this.flag = true;
+        omoguciZaKorisnika();
 
     }
 
@@ -55,16 +71,17 @@ public class DetaljiKnjigeForm extends javax.swing.JDialog {
         txtSifraKnjige = new javax.swing.JTextField();
         txtNaziv = new javax.swing.JTextField();
         txtAutor = new javax.swing.JTextField();
-        txtGodina = new javax.swing.JTextField();
-        txtTip = new javax.swing.JTextField();
+        txtNaziv1 = new javax.swing.JTextField();
+        txtGodina1 = new javax.swing.JTextField();
         txtTema = new javax.swing.JTextField();
         txtPolaPola = new javax.swing.JTextField();
         txtOsvojeneNagrade = new javax.swing.JTextField();
         lblTema = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnKreirajKnjigu = new javax.swing.JButton();
+        btnObrisiKnjigu = new javax.swing.JButton();
+        lblNaslov = new javax.swing.JLabel();
+        btnZatvori = new javax.swing.JButton();
+        cbTipKnjige = new javax.swing.JComboBox<>();
 
         jTextField4.setText("jTextField1");
 
@@ -103,9 +120,9 @@ public class DetaljiKnjigeForm extends javax.swing.JDialog {
 
         txtAutor.setEditable(false);
 
-        txtGodina.setEditable(false);
+        txtNaziv1.setEditable(false);
 
-        txtTip.setEditable(false);
+        txtGodina1.setEditable(false);
 
         txtTema.setEditable(false);
 
@@ -115,26 +132,34 @@ public class DetaljiKnjigeForm extends javax.swing.JDialog {
 
         lblTema.setText("Tema knjige:");
 
-        jButton1.setText("Zaduzi knjigu, implementirati");
-
-        jButton2.setText("Obrisi knjigu, implementirati");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnKreirajKnjigu.setText("Kreiraj knjigu");
+        btnKreirajKnjigu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnKreirajKnjiguActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Kreiraj knjigu, implementirati");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnObrisiKnjigu.setText("Obriši knjigu");
+        btnObrisiKnjigu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnObrisiKnjiguActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Izmeni knjigu, implementirati");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        lblNaslov.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblNaslov.setText("Rezultati pretrage");
+
+        btnZatvori.setText("Zatvori");
+        btnZatvori.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btnZatvoriActionPerformed(evt);
+            }
+        });
+
+        cbTipKnjige.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Beletristika", "Strucna literatura" }));
+        cbTipKnjige.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbTipKnjigeActionPerformed(evt);
             }
         });
 
@@ -145,138 +170,225 @@ public class DetaljiKnjigeForm extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(lblSifra, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtSifraKnjige, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(lblNaziv, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtNaziv))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(lblAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtAutor))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(lblGodina, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtGodina))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(lblTip, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtTip))
-                        .addComponent(lblZauzeta, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(lblOsvojeneNagrade, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtOsvojeneNagrade))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(lblPolaPola, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtPolaPola)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblTema, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(txtTema, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(33, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblNaslov, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(lblSifra, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txtSifraKnjige, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(lblGodina, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txtGodina1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(lblTip, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(cbTipKnjige, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(lblZauzeta, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(lblNaziv, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtNaziv)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(txtNaziv1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(lblPolaPola, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txtPolaPola))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(lblOsvojeneNagrade, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txtOsvojeneNagrade, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(134, 134, 134)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnObrisiKnjigu, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnKreirajKnjigu, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnZatvori, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addContainerGap()
+                .addComponent(lblNaslov, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                    .addGroup(layout.createSequentialGroup()
-                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                            .addComponent(lblSifra)
-                                                            .addComponent(txtSifraKnjige, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addGap(34, 34, 34))
-                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(txtNaziv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(lblNaziv)))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(txtAutor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(lblAutor))
-                                                .addGap(34, 34, 34))
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(txtGodina, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(lblGodina)))
-                                        .addGap(34, 34, 34))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(txtTip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(lblTip)))
-                                .addGap(34, 34, 34))
-                            .addComponent(lblZauzeta))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblSifra)
+                            .addComponent(txtSifraKnjige, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(15, 15, 15)
+                        .addComponent(lblNaziv)
+                        .addGap(15, 15, 15)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblAutor)
+                            .addComponent(txtAutor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtNaziv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtNaziv1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblGodina)
+                    .addComponent(txtGodina1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTip)
+                    .addComponent(cbTipKnjige, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblZauzeta)
                         .addGap(34, 34, 34))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtPolaPola, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lblPolaPola, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtOsvojeneNagrade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblOsvojeneNagrade))
-                .addGap(18, 18, 18)
+                .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTema)
                     .addComponent(txtTema, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(47, 47, 47)
-                .addComponent(jButton1)
-                .addGap(18, 18, 18)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton5)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addGap(39, 39, 39)
+                .addComponent(btnKreirajKnjigu)
+                .addGap(35, 35, 35)
+                .addComponent(btnObrisiKnjigu)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addComponent(btnZatvori)
+                .addGap(29, 29, 29))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnObrisiKnjiguActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObrisiKnjiguActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+        
+        long sifra = Long.valueOf(txtSifraKnjige.getText());
+        String naziv = txtNaziv1.getText();
+        String autor = txtAutor.getText();
+        int godina = Integer.parseInt(txtGodina1.getText());
+        boolean b;
+        if(lblZauzeta.equals("Knjiga je zauzeta!")){
+            b = false;
+        }
+        else{
+            b = true;
+        }
+        Knjiga knjiga = new Knjiga(sifra, naziv, autor, godina, b);
+        Zahtev zahtev = new Zahtev(knjiga, Operacija.OBRISI_KNJIGU);
+        Kontroler.getInstanca().posaljiZahtev(zahtev);
+        Odgovor odgovor = Kontroler.getInstanca().primiOdgovor();
+        boolean bl = (boolean) odgovor.getOdgovor();
+        if(bl){
+            JOptionPane.showMessageDialog(rootPane, "Knjiga je uspesno izbrisana!");
+            
+        }
+        else{
+            JOptionPane.showMessageDialog(rootPane, "Knjiga ne moze da se izbrise!");
+        }
+        
+        return;
+        
+    }//GEN-LAST:event_btnObrisiKnjiguActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void btnKreirajKnjiguActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKreirajKnjiguActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+
+        String naziv = txtNaziv1.getText();
+        String autor = txtAutor.getText();
+        int godina = Integer.parseInt(txtGodina1.getText());
+        Knjiga knjiga = new Knjiga(-1l, naziv, autor, godina, false);
+        String tipKnjige = String.valueOf(cbTipKnjige.getSelectedItem());
+
+        if (tipKnjige.equals("Beletristika")) {
+            String zanr = txtPolaPola.getText();
+            String nagrade = txtOsvojeneNagrade.getText();
+            String tema = txtTema.getText();
+            Beletristika bele = new Beletristika(knjiga, zanr, tema, nagrade);
+            Zahtev z = new Zahtev(bele, Operacija.KREIRAJ_KNJIGU);
+            Kontroler.getInstanca().posaljiZahtev(z);
+            Odgovor odgovor = Kontroler.getInstanca().primiOdgovor();
+            if(odgovor.getOdgovor().equals("ok")){
+                 JOptionPane.showMessageDialog(rootPane, "Knjiga je uspesno sacuvana!");
+                 return;
+            }
+             JOptionPane.showMessageDialog(rootPane, "Knjiga nije uspesno sacuvana!");
+        } else {
+
+            String naucna = txtPolaPola.getText();
+            StrucnaLiteratura strucna = new StrucnaLiteratura(knjiga, naucna);
+            Zahtev z = new Zahtev(strucna, Operacija.KREIRAJ_KNJIGU);
+            Kontroler.getInstanca().posaljiZahtev(z);
+            Odgovor odgovor = Kontroler.getInstanca().primiOdgovor();
+            if(odgovor.getOdgovor().equals("ok")){
+                 JOptionPane.showMessageDialog(rootPane, "Knjiga je uspesno sacuvana!");
+                 return;
+            }
+             JOptionPane.showMessageDialog(rootPane, "Knjiga nije uspesno sacuvana!");
+        }
+
+    }//GEN-LAST:event_btnKreirajKnjiguActionPerformed
+
+    private void btnZatvoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZatvoriActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_btnZatvoriActionPerformed
+
+    private void cbTipKnjigeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTipKnjigeActionPerformed
+        // TODO add your handling code here:
+
+        String tipKnjige = String.valueOf(cbTipKnjige.getSelectedItem());
+
+        if (tipKnjige.equals("Strucna literatura")) {
+            txtOsvojeneNagrade.setEnabled(false);
+            txtTema.setEnabled(false);
+            lblPolaPola.setText("Naucna oblast:");
+        } else {
+            txtOsvojeneNagrade.setEnabled(true);
+            txtTema.setEnabled(true);
+            lblPolaPola.setText("Zanr: ");
+        }
+
+
+    }//GEN-LAST:event_cbTipKnjigeActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnKreirajKnjigu;
+    private javax.swing.JButton btnObrisiKnjigu;
+    private javax.swing.JButton btnZatvori;
+    private javax.swing.JComboBox<String> cbTipKnjige;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JLabel lblAutor;
     private javax.swing.JLabel lblGodina;
+    private javax.swing.JLabel lblNaslov;
     private javax.swing.JLabel lblNaziv;
     private javax.swing.JLabel lblOsvojeneNagrade;
     private javax.swing.JLabel lblPolaPola;
@@ -285,13 +397,13 @@ public class DetaljiKnjigeForm extends javax.swing.JDialog {
     private javax.swing.JLabel lblTip;
     private javax.swing.JLabel lblZauzeta;
     private javax.swing.JTextField txtAutor;
-    private javax.swing.JTextField txtGodina;
+    private javax.swing.JTextField txtGodina1;
     private javax.swing.JTextField txtNaziv;
+    private javax.swing.JTextField txtNaziv1;
     private javax.swing.JTextField txtOsvojeneNagrade;
     private javax.swing.JTextField txtPolaPola;
     private javax.swing.JTextField txtSifraKnjige;
     private javax.swing.JTextField txtTema;
-    private javax.swing.JTextField txtTip;
     // End of variables declaration//GEN-END:variables
 
     public void popuniPolja() {
@@ -300,9 +412,10 @@ public class DetaljiKnjigeForm extends javax.swing.JDialog {
         StrucnaLiteratura strucna;
 
         txtSifraKnjige.setText(String.valueOf(knjiga.getSifraKnjige()));
-        txtNaziv.setText(knjiga.getNazivKnjige());
+        txtNaziv1.setText(knjiga.getNazivKnjige());
         txtAutor.setText(knjiga.getAutorKnjige());
-        txtGodina.setText(String.valueOf(knjiga.getGodina()));
+        txtGodina1.setText(String.valueOf(knjiga.getGodina()));
+        cbTipKnjige.setEnabled(false);
         if (knjiga.isJeZauzeta()) {
             lblZauzeta.setText("Knjiga je zauzeta!");
             lblZauzeta.setForeground(Color.red);
@@ -312,7 +425,7 @@ public class DetaljiKnjigeForm extends javax.swing.JDialog {
         }
         if (o instanceof Beletristika) {
             bele = (Beletristika) o;
-            txtTip.setText("Beletristika");
+            cbTipKnjige.setSelectedItem("Beletristika");
             lblPolaPola.setText("Zanr:");
             txtPolaPola.setText(bele.getZanr());
             txtTema.setText(bele.getTema());
@@ -320,7 +433,7 @@ public class DetaljiKnjigeForm extends javax.swing.JDialog {
 
         } else {
             strucna = (StrucnaLiteratura) o;
-            txtTip.setText("Strucna literatura");
+            cbTipKnjige.setSelectedItem("Strucna literatura");
             lblPolaPola.setText("Naucna oblast:");
             txtPolaPola.setText(strucna.getNaucnaOblast());
             lblTema.setVisible(false);
@@ -329,6 +442,23 @@ public class DetaljiKnjigeForm extends javax.swing.JDialog {
             txtOsvojeneNagrade.setVisible(false);
 
         }
+
+    }
+
+    public void omoguciZaKorisnika() {
+
+        
+            System.out.println("usao");
+            txtNaziv1.setEditable(true);
+            txtAutor.setEditable(true);
+            txtGodina1.setEditable(true);
+            cbTipKnjige.setEditable(true);
+            txtPolaPola.setEditable(true);
+            txtTema.setEditable(true);
+            txtOsvojeneNagrade.setEditable(true);
+            btnObrisiKnjigu.setVisible(false);
+
+        
 
     }
 

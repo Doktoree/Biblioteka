@@ -80,12 +80,12 @@ public class Knjiga extends OpstiDomenskiObjekat {
 
     @Override
     public String getParametre() {
-        return String.format("%s, '%s', '%s', %s, %s", sifraKnjige, nazivKnjige, autorKnjige, godina,jeZauzeta);
+        return String.format("'%s', '%s', %s, %s", nazivKnjige, autorKnjige, godina,jeZauzeta);
     }
 
     @Override
     public String getNaziveParametara() {
-        return "sifra_knjige, naziv_knjige, autor_knjige, datum_izdavanja, je_zauzeta";
+        return "naziv_knjige, autor_knjige, datum_izdavanja, je_zauzeta";
     }
 
     @Override
