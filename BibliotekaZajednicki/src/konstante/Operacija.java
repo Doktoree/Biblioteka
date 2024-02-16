@@ -17,4 +17,5 @@ public enum Operacija implements Serializable{
     LOGIN,
     KREIRAJ_KNJIGU,
     OBRISI_KNJIGU,
+    VRATI_DETALJE_CLANA,
 }

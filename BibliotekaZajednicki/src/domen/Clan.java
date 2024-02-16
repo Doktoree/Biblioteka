@@ -131,7 +131,7 @@ public class Clan extends OpstiDomenskiObjekat {
                 String telefon = rs.getString("broj_telefona_clana");
                 LocalDate datum = rs.getDate("datum_rodjenja_clana").toLocalDate();
                 
-                Clan clan = new Clan(sifraClana, imeClana, prezimeClana, adresaClana, brojTelefonaClana, datumRodjenjaClana);
+                Clan clan = new Clan(sifra, ime, prezime, adresa, telefon, datum);
                 clanovi.add(clan);
                 
             }

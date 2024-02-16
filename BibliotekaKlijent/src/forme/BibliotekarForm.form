@@ -67,6 +67,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Pretraga &#x10d;lanova"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem3ActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

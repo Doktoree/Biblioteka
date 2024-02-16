@@ -18,14 +18,15 @@ import sistemske_operacije.OpstaSO;
  */
 public class SONadjiClanove extends OpstaSO {
 
-    List<OpstiDomenskiObjekat> clanovi;
+    List<Clan> clanovi;
     Clan clan;
     boolean uspesno;
-    List<OpstiDomenskiObjekat> rezultat;
+    List<Clan> rezultat;
     
-    public SONadjiClanove(List<OpstiDomenskiObjekat> clanovi, Clan clan) {
+    public SONadjiClanove(List<Clan> clanovi, Clan clan) {
         this.clanovi = clanovi;
         this.clan = clan;
+        System.out.println("0000000000000: " + clan.getSifraClana());
         
     }
 
@@ -45,17 +46,84 @@ public class SONadjiClanove extends OpstaSO {
 
     }
 
-    public List<OpstiDomenskiObjekat> getClanovi() {
+    public List<Clan> getClanovi() {
         return rezultat;
     }
     
     private boolean vratiPoUslovu(Clan c){
         
-        if(c.getImeClana().equals(clan.getImeClana()) || c.getPrezimeClana().equals(clan.getPrezimeClana())
-                || c.getSifraClana() == clan.getSifraClana()){
+      if (clan.getImeClana().isEmpty() && clan.getPrezimeClana().isEmpty() && clan.getSifraClana() == -1l) {
+            return false;
+
+        }
+
+        if (!clan.getImeClana().isEmpty() && clan.getImeClana().equalsIgnoreCase(c.getImeClana())) {
+            if (!clan.getPrezimeClana().isEmpty()) {
+                if (clan.getPrezimeClana().equalsIgnoreCase(c.getPrezimeClana())) {
+                    if (clan.getSifraClana() != -1l) {
+                        if (clan.getSifraClana().compareTo(c.getSifraClana()) == 0) {
+                            return true;
+                        }
+                        return false;
+                    }
+                    return true;
+                }
+                return false;
+            }
+
+            if (clan.getSifraClana() != -1l) {
+                if (clan.getSifraClana().compareTo(c.getSifraClana()) == 0) {
+                    return true;
+                }
+                return false;
+            }
+            return true;
+        }
+
+        if (!clan.getPrezimeClana().isEmpty() && clan.getPrezimeClana().equalsIgnoreCase(c.getPrezimeClana())) {
+            if (!clan.getImeClana().isEmpty()) {
+                if (clan.getImeClana().equalsIgnoreCase(c.getImeClana())) {
+                    if (clan.getSifraClana() != -1l) {
+                         if (clan.getSifraClana() == c.getSifraClana()) {
+                            return true;
+                        }
+                        return false;
+                    }
+                    return true;
+                }
+                return false;
+            }
+
+            if (clan.getSifraClana() != -1l) {
+                if (clan.getSifraClana().compareTo(c.getSifraClana()) == 0) {
+                    return true;
+                }
+                return false;
+            }
             return true;
         }
         
+        if (clan.getSifraClana() != -1l && (clan.getSifraClana().compareTo(c.getSifraClana()) == 0)) {
+            if (!clan.getPrezimeClana().isEmpty()) {
+                if (clan.getPrezimeClana().equalsIgnoreCase(c.getPrezimeClana())) {
+                    if (!clan.getImeClana().isEmpty()) {
+                        return clan.getImeClana().equalsIgnoreCase(c.getImeClana());
+                    }
+                    return true;
+                }
+                return false;
+            }
+
+            if (!clan.getImeClana().isEmpty()) {
+                if (clan.getImeClana().equalsIgnoreCase(c.getImeClana())) {
+                    return true;
+                }
+                return false;
+            }
+            return true;
+        }
+        
+        System.out.println("SSSSSSSSSSSSSSSSSSS");
         return false;
         
         

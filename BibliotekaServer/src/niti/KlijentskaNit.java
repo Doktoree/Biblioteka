@@ -6,6 +6,7 @@ package niti;
 
 import db.DbBroker;
 import domen.Beletristika;
+import domen.Clan;
 import domen.Knjiga;
 import domen.Korisnik;
 import domen.OpstiDomenskiObjekat;
@@ -21,6 +22,7 @@ import java.util.logging.Logger;
 import konstante.Operacija;
 import liste.ListaPrijavljenih;
 import logika.Kontroler;
+import sistemske_operacije.clan.SONadjiClanove;
 import sistemske_operacije.knjiga.SONadjiKnjige;
 import sistemske_operacije.knjiga.SOObrisiKnjigu;
 import sistemske_operacije.knjiga.SOUcitajKnjigu;
@@ -127,6 +129,17 @@ public class KlijentskaNit extends Thread {
                     boolean bl = obrisiKnjigu.isUspesno();
                     odgovor.setOdgovor(bl);
                     break;
+                    
+                case VRATI_DETALJE_CLANA:
+                    Clan clan = (Clan) zahtev.getParametar();
+                    List<Clan> clanovi = Kontroler.getInstanca().vratiClanove(clan);
+                    SONadjiClanove nadjiClanove = new SONadjiClanove(clanovi, clan);
+                    nadjiClanove.executeOperation();
+                    List<Clan> rezultatClanovi = nadjiClanove.getClanovi();
+                    odgovor.setOdgovor(rezultatClanovi);
+                    break;
+
+                    
             }
 
             posaljiOdgovor(odgovor);

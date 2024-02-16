@@ -15,6 +15,9 @@ public class Main {
     public static void main(String[] args) {
         PretragaKnjigaForma pf = new PretragaKnjigaForma();
         pf.setVisible(true);
+        Long a = -3l;
+        Long b = -3l;
+        System.out.println(a==b);
     }
     
 }

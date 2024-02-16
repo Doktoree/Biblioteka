@@ -4,6 +4,15 @@
  */
 package forme;
 
+import domen.Clan;
+import java.time.LocalDate;
+import java.util.List;
+import konstante.Operacija;
+import logika.Kontroler;
+import modeli.PrikazClanovaModel;
+import transfer.Odgovor;
+import transfer.Zahtev;
+
 /**
  *
  * @author Lav
@@ -36,7 +45,7 @@ public class PretragaClanovaForm extends javax.swing.JDialog {
         txtPrezimeClana = new javax.swing.JTextField();
         btnPretrazi = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tblTabelaKnjige = new javax.swing.JTable();
+        tblTabelaClanovi = new javax.swing.JTable();
         btnPretrazi1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -57,7 +66,7 @@ public class PretragaClanovaForm extends javax.swing.JDialog {
             }
         });
 
-        tblTabelaKnjige.setModel(new javax.swing.table.DefaultTableModel(
+        tblTabelaClanovi.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -75,7 +84,7 @@ public class PretragaClanovaForm extends javax.swing.JDialog {
                 return types [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(tblTabelaKnjige);
+        jScrollPane3.setViewportView(tblTabelaClanovi);
 
         btnPretrazi1.setText("Detalji");
         btnPretrazi1.addActionListener(new java.awt.event.ActionListener() {
@@ -144,6 +153,25 @@ public class PretragaClanovaForm extends javax.swing.JDialog {
 
     private void btnPretraziActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPretraziActionPerformed
 
+        Long sifra;
+        if (txtSifraClana.getText().isEmpty()){
+            sifra = -1l;
+        }
+        else{
+            sifra = Long.valueOf(txtSifraClana.getText());
+        }
+        System.out.println("sifra: " + sifra);
+        
+        String ime = txtImeClana.getText();
+        String prezime = txtPrezimeClana.getText();
+        Clan clan = new Clan(sifra, ime, prezime, "", "", LocalDate.MIN);
+        Zahtev zahtev = new Zahtev(clan, Operacija.VRATI_DETALJE_CLANA);
+        Kontroler.getInstanca().posaljiZahtev(zahtev);
+        Odgovor odgovor = Kontroler.getInstanca().primiOdgovor();
+        List<Clan> clanovi = (List<Clan>) odgovor.getOdgovor();
+        PrikazClanovaModel prikaz = new PrikazClanovaModel(clanovi);
+        tblTabelaClanovi.setModel(prikaz);
+        
 
     }//GEN-LAST:event_btnPretraziActionPerformed
 
@@ -154,7 +182,6 @@ public class PretragaClanovaForm extends javax.swing.JDialog {
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPretrazi;
@@ -164,7 +191,7 @@ public class PretragaClanovaForm extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable tblTabelaKnjige;
+    private javax.swing.JTable tblTabelaClanovi;
     private javax.swing.JTextField txtImeClana;
     private javax.swing.JTextField txtPrezimeClana;
     private javax.swing.JTextField txtSifraClana;

@@ -96,6 +96,12 @@ public class DbBroker {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
             List<OpstiDomenskiObjekat> lista = o.konvertujRSUListu(rs);
+            if(lista.isEmpty()){
+                System.out.println("BUDAALLLLLLAAAAAA");
+            }
+            else{
+                System.out.println("&&&&&&&&&&&&&&& " + "ipak nije do tebe");
+            }
             statement.close();
             System.out.println("ResultSet uspesno postavljen!");
             return lista;

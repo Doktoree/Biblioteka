@@ -86,6 +86,11 @@ public class BibliotekarForm extends javax.swing.JFrame {
         jMenu5.add(jMenuItem2);
 
         jMenuItem3.setText("Pretraga članova");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu5.add(jMenuItem3);
 
         jMenuBar2.add(jMenu5);
@@ -179,6 +184,12 @@ public class BibliotekarForm extends javax.swing.JFrame {
         new DetaljiKnjigeForm(this, true, true).setVisible(true);
         
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        
+        new PretragaClanovaForm(this, true).setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
      * @param args the command line arguments
