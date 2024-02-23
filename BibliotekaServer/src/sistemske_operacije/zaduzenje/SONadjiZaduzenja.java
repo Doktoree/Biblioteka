@@ -31,7 +31,6 @@ public class SONadjiZaduzenja extends OpstaSO {
         rezultat = new ArrayList<>();
         
         for(OpstiDomenskiObjekat o: zaduzenja){
-            
             Zaduzenje za = (Zaduzenje) o;
             
             if(vratiPoUslovu(za)){
@@ -43,7 +42,7 @@ public class SONadjiZaduzenja extends OpstaSO {
 
     private boolean vratiPoUslovu(Zaduzenje zad) {
 
-        if(zad.getClan().getSifraClana()== zaduzenje.getClan().getSifraClana()){
+        if(zad.getClan().getSifraClana().compareTo(zaduzenje.getClan().getSifraClana()) == 0){
             return true;
         }
         

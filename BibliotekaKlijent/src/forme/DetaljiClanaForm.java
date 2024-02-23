@@ -4,18 +4,61 @@
  */
 package forme;
 
+import domen.Clan;
+import domen.Zaduzenje;
+import java.time.LocalDate;
+import java.util.List;
+import javax.swing.JOptionPane;
+import konstante.Operacija;
+import logika.Kontroler;
+import modeli.PrikazZaduzenjaModel;
+import transfer.Odgovor;
+import transfer.Zahtev;
+
 /**
  *
  * @author Lav
  */
 public class DetaljiClanaForm extends javax.swing.JDialog {
 
+    List<Zaduzenje> listaZaduzenja;
+    Clan clan;
+    boolean jeIzmena;
+    boolean izmeni;
+
     /**
      * Creates new form DetaljiClanaForm
      */
+    public DetaljiClanaForm(java.awt.Frame parent, boolean modal, List<Zaduzenje> listaZaduzenja, Clan clan, boolean jeIzmena) {
+        super(parent, modal);
+        initComponents();
+        this.listaZaduzenja = listaZaduzenja;
+        this.clan = clan;
+        this.jeIzmena = jeIzmena;
+        popuniPolja();
+        if (jeIzmena) {
+            provera();
+            btnSacuvajClana.setVisible(true);
+            tblZaduzenjaClana.setVisible(false);
+            tblZaduzenjaClana = null;
+            izmeni = true;
+        } else {
+            btnSacuvajClana.setVisible(false);
+            
+        }
+
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+    }
+
     public DetaljiClanaForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        provera();
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        izmeni = false;
+        
+
     }
 
     /**
@@ -43,7 +86,12 @@ public class DetaljiClanaForm extends javax.swing.JDialog {
         txtBrojTelefonaClana = new javax.swing.JTextField();
         txtDatumRodjenja = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblPretragaClanova = new javax.swing.JTable();
+        tblZaduzenjaClana = new javax.swing.JTable();
+        lblNaslov1 = new javax.swing.JLabel();
+        btnSacuvajClana = new javax.swing.JButton();
+        btnZatvori = new javax.swing.JButton();
+        btnKreirajNovoZad = new javax.swing.JButton();
+        btnIzmeniZaduzenje = new javax.swing.JButton();
 
         txtGodina3.setEditable(false);
 
@@ -78,7 +126,7 @@ public class DetaljiClanaForm extends javax.swing.JDialog {
 
         txtDatumRodjenja.setEditable(false);
 
-        tblPretragaClanova.setModel(new javax.swing.table.DefaultTableModel(
+        tblZaduzenjaClana.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -89,44 +137,91 @@ public class DetaljiClanaForm extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblPretragaClanova);
+        jScrollPane1.setViewportView(tblZaduzenjaClana);
+
+        lblNaslov1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblNaslov1.setText("Sva zaduženja člana");
+
+        btnSacuvajClana.setText("Sačuvaj člana");
+        btnSacuvajClana.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSacuvajClanaActionPerformed(evt);
+            }
+        });
+
+        btnZatvori.setText("Zatvori");
+        btnZatvori.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnZatvoriActionPerformed(evt);
+            }
+        });
+
+        btnKreirajNovoZad.setText("Kreiraj novo zaduženje");
+        btnKreirajNovoZad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKreirajNovoZadActionPerformed(evt);
+            }
+        });
+
+        btnIzmeniZaduzenje.setText("Izmeni zaduženje");
+        btnIzmeniZaduzenje.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIzmeniZaduzenjeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblNaslov, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPrezimeClana, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblSifra, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtSifraClana, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblGodina, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtAdresaClana, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblTip, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBrojTelefonaClana, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblZauzeta, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtDatumRodjenja, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblNaziv, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNaziv)
-                            .addComponent(txtImeClana, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1))
-                .addContainerGap(86, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnZatvori, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 657, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblNaslov1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(btnSacuvajClana, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(lblNaslov, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(layout.createSequentialGroup()
+                                                    .addComponent(lblAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(txtPrezimeClana, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGroup(layout.createSequentialGroup()
+                                                    .addComponent(lblSifra, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(txtSifraClana, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGroup(layout.createSequentialGroup()
+                                                    .addComponent(lblGodina, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(txtAdresaClana, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGroup(layout.createSequentialGroup()
+                                                    .addComponent(lblTip, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(txtBrojTelefonaClana, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGroup(layout.createSequentialGroup()
+                                                    .addComponent(lblZauzeta, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(txtDatumRodjenja, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGroup(layout.createSequentialGroup()
+                                                    .addComponent(lblNaziv, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(txtNaziv)
+                                                        .addComponent(txtImeClana, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addGap(86, 86, 86))))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(14, 14, 14)
+                            .addComponent(btnKreirajNovoZad, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnIzmeniZaduzenje, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -160,29 +255,125 @@ public class DetaljiClanaForm extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblZauzeta)
                     .addComponent(txtDatumRodjenja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(62, 62, 62)
+                .addGap(60, 60, 60)
+                .addComponent(btnSacuvajClana)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblNaslov1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(202, Short.MAX_VALUE))
+                .addGap(54, 54, 54)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnIzmeniZaduzenje)
+                    .addComponent(btnKreirajNovoZad))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addComponent(btnZatvori)
+                .addGap(15, 15, 15))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSacuvajClanaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSacuvajClanaActionPerformed
+        // TODO add your handling code here:
+
+        if (izmeni) {
+            Long sifra = Long.valueOf(txtSifraClana.getText());
+            String ime = txtImeClana.getText();
+            String prezime = txtPrezimeClana.getText();
+            String adresa = txtAdresaClana.getText();
+            String brojTelefona = txtBrojTelefonaClana.getText();
+            try {
+                LocalDate datum = LocalDate.parse(txtDatumRodjenja.getText());
+                Clan clan = new Clan(sifra, ime, prezime, adresa, brojTelefona, datum);
+                Zahtev zahtev = new Zahtev(clan, Operacija.IZMENI_CLANA);
+                Kontroler.getInstanca().posaljiZahtev(zahtev);
+                Odgovor odgovor = Kontroler.getInstanca().primiOdgovor();
+                boolean b = (boolean) odgovor.getOdgovor();
+                if(b){
+                    JOptionPane.showMessageDialog(rootPane, "Clan je uspesno sacuvan!");
+                }
+                else{
+                    JOptionPane.showMessageDialog(rootPane, "Clan nije uspesno sacuvan!");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(rootPane, "Datum nije u ispravnom formatu!");
+                return;
+            }
+
+        }
+        
+        else{
+            String ime = txtImeClana.getText();
+            String prezime = txtPrezimeClana.getText();
+            String adresa = txtAdresaClana.getText();
+            String brojTelefona = txtBrojTelefonaClana.getText();
+             try {
+                LocalDate datum = LocalDate.parse(txtDatumRodjenja.getText());
+                Clan clan = new Clan(-1l, ime, prezime, adresa, brojTelefona, datum);
+                Zahtev zahtev = new Zahtev(clan, Operacija.KREIRAJ_CLANA);
+                Kontroler.getInstanca().posaljiZahtev(zahtev);
+                Odgovor odgovor = Kontroler.getInstanca().primiOdgovor();
+                boolean b = (boolean) odgovor.getOdgovor();
+                if(b){
+                    JOptionPane.showMessageDialog(rootPane, "Clan je uspesno kreiran!");
+                }
+                else{
+                    JOptionPane.showMessageDialog(rootPane, "Clan nije uspesno kreiran!");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(rootPane, "Datum nije u ispravnom formatu!");
+                return;
+            }
+        }
+
+    }//GEN-LAST:event_btnSacuvajClanaActionPerformed
+
+    private void btnZatvoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZatvoriActionPerformed
+        // TODO add your handling code here:
+
+        dispose();
+
+    }//GEN-LAST:event_btnZatvoriActionPerformed
+
+    private void btnKreirajNovoZadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKreirajNovoZadActionPerformed
+        // TODO add your handling code here:
+        new ZaduzenjaForm(clan).setVisible(true);
+        dispose();
+        
+    }//GEN-LAST:event_btnKreirajNovoZadActionPerformed
+
+    private void btnIzmeniZaduzenjeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIzmeniZaduzenjeActionPerformed
+        // TODO add your handling code here:
+        
+        int red = tblZaduzenjaClana.getSelectedRow();
+        Zaduzenje zaduzenje = listaZaduzenja.get(red);
+        System.out.println("SSS: " + zaduzenje.getSifraZaduzenja());
+        
+        new IzmeniZaduzenjeForm(zaduzenje).setVisible(true);
+        dispose();
+               
+    }//GEN-LAST:event_btnIzmeniZaduzenjeActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    
 
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnIzmeniZaduzenje;
+    private javax.swing.JButton btnKreirajNovoZad;
+    private javax.swing.JButton btnSacuvajClana;
+    private javax.swing.JButton btnZatvori;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAutor;
     private javax.swing.JLabel lblGodina;
     private javax.swing.JLabel lblNaslov;
+    private javax.swing.JLabel lblNaslov1;
     private javax.swing.JLabel lblNaziv;
     private javax.swing.JLabel lblSifra;
     private javax.swing.JLabel lblTip;
     private javax.swing.JLabel lblZauzeta;
-    private javax.swing.JTable tblPretragaClanova;
+    private javax.swing.JTable tblZaduzenjaClana;
     private javax.swing.JTextField txtAdresaClana;
     private javax.swing.JTextField txtBrojTelefonaClana;
     private javax.swing.JTextField txtDatumRodjenja;
@@ -192,4 +383,32 @@ public class DetaljiClanaForm extends javax.swing.JDialog {
     private javax.swing.JTextField txtPrezimeClana;
     private javax.swing.JTextField txtSifraClana;
     // End of variables declaration//GEN-END:variables
+
+    public void popuniPolja() {
+
+        txtSifraClana.setText(String.valueOf(clan.getSifraClana()));
+        txtImeClana.setText(clan.getImeClana());
+        txtPrezimeClana.setText(clan.getPrezimeClana());
+        txtAdresaClana.setText(clan.getAdresaClana());
+        txtBrojTelefonaClana.setText(clan.getBrojTelefonaClana());
+        txtDatumRodjenja.setText(String.valueOf(clan.getDatumRodjenjaClana()));
+
+        PrikazZaduzenjaModel prikaz = new PrikazZaduzenjaModel(listaZaduzenja);
+        tblZaduzenjaClana.setModel(prikaz);
+
+    }
+
+    public void provera() {
+
+        tblZaduzenjaClana.setVisible(false);
+        lblNaslov1.setVisible(false);
+        btnZatvori.setVisible(false);
+        txtImeClana.setEditable(true);
+        txtPrezimeClana.setEditable(true);
+        txtAdresaClana.setEditable(true);
+        txtBrojTelefonaClana.setEditable(true);
+        txtDatumRodjenja.setEditable(true);
+
+    }
+
 }

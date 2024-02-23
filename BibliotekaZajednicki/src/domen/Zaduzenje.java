@@ -87,14 +87,14 @@ public class Zaduzenje extends OpstiDomenskiObjekat{
 
     @Override
     public String getParametre() {
-        return String.format("%s, '%s', '%s', %s, %s", sifraZaduzenja, datumPocetkaZaduzenja, datumZavrsetkaZaduzenja,
+        return String.format("'%s', '%s', %s, %s", datumPocetkaZaduzenja, datumZavrsetkaZaduzenja,
                 brojKnjiga, clan.getSifraClana());
     }
 
     @Override
     public String getNaziveParametara() {
         
-        return "sifra_zaduzenja, datum_pocetka_zaduzenja, datum_zavrsetka_zaduzenja, broj_knjiga, sifra_clana";
+        return "datum_pocetka_zaduzenja, datum_zavrsetka_zaduzenja, broj_knjiga, sifra_clana";
     }
 
     @Override
@@ -121,9 +121,9 @@ public class Zaduzenje extends OpstiDomenskiObjekat{
                 int broj = rs.getInt("broj_knjiga");
                 long sifraClana = rs.getLong("sifra_clana");
                 
-                Clan clan = new Clan(sifraClana);
+                Clan cl = new Clan(sifraClana);
                 
-                Zaduzenje zaduzenje = new Zaduzenje(sifraZaduzenja, datumPocetkaZaduzenja, datumZavrsetkaZaduzenja, brojKnjiga, clan);
+                Zaduzenje zaduzenje = new Zaduzenje(sifra, od, kraj, broj, cl);
                 lista.add(zaduzenje);
                 
             }
@@ -138,8 +138,9 @@ public class Zaduzenje extends OpstiDomenskiObjekat{
     @Override
     public String getUpdateUpit() {
         
-        return "sifra_zaduzenja = " + sifraZaduzenja + "datum_pocetka_zaduzenja = '" + datumPocetkaZaduzenja + "'" + "datum_zavrsetka_zaduzenja = '" + datumZavrsetkaZaduzenja + "'"
-                + "broj_knjiga = " + brojKnjiga + "sifra_clana = " + clan.getSifraClana();
+        return "sifra_zaduzenja = " + sifraZaduzenja + "," +  "datum_pocetka_zaduzenja = '" + datumPocetkaZaduzenja + "'" + "," + "datum_zavrsetka_zaduzenja = '" + datumZavrsetkaZaduzenja + "'"
+                + "," + "broj_knjiga = " + brojKnjiga + "," +  "sifra_clana = " + clan.getSifraClana();
+                
     }
 
     @Override

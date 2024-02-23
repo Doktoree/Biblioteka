@@ -4,6 +4,7 @@
  */
 package sistemske_operacije.knjiga;
 
+import db.DbBroker;
 import domen.Knjiga;
 import domen.OpstiDomenskiObjekat;
 import java.util.ArrayList;
@@ -17,19 +18,19 @@ import sistemske_operacije.OpstaSO;
 public class SONadjiKnjige extends OpstaSO {
 
     Knjiga knjiga;
-    List<Knjiga> knjige;
-    List<Knjiga> rezultat;
+    List<OpstiDomenskiObjekat> knjige;
+    List<OpstiDomenskiObjekat> rezultat;
 
-    public SONadjiKnjige(Knjiga knjiga, List<Knjiga> knjige) {
+    public SONadjiKnjige(Knjiga knjiga) {
         this.knjiga = knjiga;
-        this.knjige = knjige;
+        rezultat = new ArrayList<>();
     }
 
     @Override
     protected void executeSpecificOperation() throws Exception {
 
-        rezultat = new ArrayList<>();
-
+        
+        knjige = DbBroker.getInstanca().vratiOpsteDomenskeObjekte(new Knjiga());
         for (OpstiDomenskiObjekat o : knjige) {
 
             Knjiga knj = (Knjiga) o;
@@ -39,6 +40,8 @@ public class SONadjiKnjige extends OpstaSO {
             }
 
         }
+
+        
 
     }
 
@@ -119,7 +122,7 @@ public class SONadjiKnjige extends OpstaSO {
         return false;
     }
 
-    public List<Knjiga> getRezultat() {
+    public List<OpstiDomenskiObjekat> getRezultat() {
         return rezultat;
     }
 

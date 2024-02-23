@@ -72,14 +72,14 @@ public class StavkaZaduzenja extends OpstiDomenskiObjekat {
     @Override
     public String getParametre() {
         
-        return String.format("%s, %s, '%s',%s", sifraStavkeZaduzenja, zaduzenje.getSifraZaduzenja(), 
+        return String.format("%s, '%s',%s", zaduzenje.getSifraZaduzenja(), 
                 stanje, knjiga.getSifraKnjige());
     }
 
     @Override
     public String getNaziveParametara() {
         
-        return "sifra_stavke_zaduzenja, sifra_zaduzenja, stanje, sifra_knjige";
+        return "sifra_zaduzenja, stanje, sifra_knjige";
     }
 
     @Override
@@ -108,7 +108,7 @@ public class StavkaZaduzenja extends OpstiDomenskiObjekat {
                 Zaduzenje zad = new Zaduzenje(sifraZaduzenja);
                 Knjiga knjiga = new Knjiga(sifraKnjige);
                 
-                StavkaZaduzenja stavka = new StavkaZaduzenja(sifraStavkeZaduzenja, zaduzenje, stanje, knjiga);
+                StavkaZaduzenja stavka = new StavkaZaduzenja(sifra, zad, stanje, knjiga);
                 
                 lista.add(stavka);
                 

@@ -26,7 +26,15 @@ public class SOZapamtiClana extends OpstaSO {
     @Override
     protected void executeSpecificOperation() throws Exception {
         
-        uspesno = DbBroker.getInstanca().sacuvajOpstiDomenskiObjekat(clan);
+        if(DbBroker.getInstanca().vratiOpstiDomenskiObjekatPrimarniKljuc(clan, clan.getSifraClana()) == null){
+            uspesno = DbBroker.getInstanca().sacuvajOpstiDomenskiObjekat(clan);
+            System.out.println("Uspesno je izvrseno kreiranje clana!");
+        }
+        else{
+            uspesno = DbBroker.getInstanca().updateOpstiDomenskiObjekat(clan);
+            System.out.println("Uspesno je izvrseno azuriranje clana!");
+        }
+        
         
     }
 

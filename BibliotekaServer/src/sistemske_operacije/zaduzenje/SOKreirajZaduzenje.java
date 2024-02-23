@@ -31,6 +31,12 @@ public class SOKreirajZaduzenje extends OpstaSO {
         
     }
 
+    public void setZaduzenje(Zaduzenje zaduzenje) {
+        this.zaduzenje = zaduzenje;
+    }
+
+    
+    
     public Zaduzenje getZaduzenje() {
         return zaduzenje;
     }

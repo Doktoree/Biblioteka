@@ -18,23 +18,21 @@ import sistemske_operacije.OpstaSO;
  */
 public class SONadjiClanove extends OpstaSO {
 
-    List<Clan> clanovi;
+    List<OpstiDomenskiObjekat> clanovi;
     Clan clan;
     boolean uspesno;
     List<Clan> rezultat;
     
-    public SONadjiClanove(List<Clan> clanovi, Clan clan) {
+    public SONadjiClanove(List<OpstiDomenskiObjekat> clanovi, Clan clan) {
         this.clanovi = clanovi;
         this.clan = clan;
-        System.out.println("0000000000000: " + clan.getSifraClana());
+        rezultat = new ArrayList<>();
         
     }
 
     @Override
     protected void executeSpecificOperation() throws Exception {
 
-        rezultat = new ArrayList<>();
-        
         for(OpstiDomenskiObjekat k: clanovi){
             Clan cl = (Clan) k;
             

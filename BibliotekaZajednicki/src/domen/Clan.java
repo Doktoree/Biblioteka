@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.sql.*;
 
 /**
  *
@@ -27,7 +28,7 @@ public class Clan extends OpstiDomenskiObjekat {
 
     public Clan() {
     }
-    
+
     public Clan(long sifraClana) {
         this.sifraClana = sifraClana;
     }
@@ -97,13 +98,13 @@ public class Clan extends OpstiDomenskiObjekat {
     @Override
     public String getParametre() {
 
-        return String.format("%s, '%s', '%s', '%s', '%s',%s ", sifraClana, imeClana,
-                prezimeClana, adresaClana, brojTelefonaClana, datumRodjenjaClana);
+        return String.format("'%s', '%s', '%s', '%s','%s' ", imeClana,
+                prezimeClana, adresaClana, brojTelefonaClana, datumRodjenjaClana.toString());
     }
 
     @Override
     public String getNaziveParametara() {
-        return "sifra_clana, ime_clana, prezime_clana, adresa_clana, broj_telefona_clana, datum_rodjenja_clana";
+        return "ime_clana, prezime_clana, adresa_clana, broj_telefona_clana, datum_rodjenja_clana";
     }
 
     @Override
@@ -118,38 +119,43 @@ public class Clan extends OpstiDomenskiObjekat {
 
     @Override
     public List<OpstiDomenskiObjekat> konvertujRSUListu(ResultSet rs) {
-        
+
         List<OpstiDomenskiObjekat> clanovi = new ArrayList<>();
-        
+
         try {
-            while(rs.next()){
-                
+            while (rs.next()) {
+
                 Long sifra = rs.getLong("sifra_clana");
+                System.out.println("Ovde 1");
                 String ime = rs.getString("ime_clana");
+                System.out.println("Ovde 2");
                 String prezime = rs.getString("prezime_clana");
+                System.out.println("Ovde 3");
                 String adresa = rs.getString("adresa_clana");
+                System.out.println("Ovde 4");
                 String telefon = rs.getString("broj_telefona_clana");
+                System.out.println("Ovde 5");
                 LocalDate datum = rs.getDate("datum_rodjenja_clana").toLocalDate();
-                
+                System.out.println("Ovde 6");
                 Clan clan = new Clan(sifra, ime, prezime, adresa, telefon, datum);
                 clanovi.add(clan);
-                
+
             }
         } catch (SQLException ex) {
             System.out.println("Greska u Clan klasi, ResultSet!");
             Logger.getLogger(Clan.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return clanovi;
-        
+
     }
 
     @Override
     public String getUpdateUpit() {
-        
-        return "sifra_clana = " + sifraClana + "ime_clana = '" + imeClana + "'" + "prezime_clana = '" + prezimeClana + "'"
-                + "adresa_clana = '" + adresaClana + "'" + "broj_telefona_clana = '" + brojTelefonaClana + "'" + 
-                "datum_rodjenja_clana = '" + datumRodjenjaClana + "'";
+
+        return " ime_clana = '" + imeClana + "'" + "," + " prezime_clana = '" + prezimeClana + "'" + ","
+                + " adresa_clana = '" + adresaClana + "'" + "," + " broj_telefona_clana = '" + brojTelefonaClana + "'"
+                + "," + " datum_rodjenja_clana = '" + datumRodjenjaClana + "'";
     }
 
     @Override
@@ -159,10 +165,10 @@ public class Clan extends OpstiDomenskiObjekat {
 
     @Override
     public String toString() {
-        
+
         return "Clan- " + " sifra clana: " + sifraClana + "," + " ime clana: " + imeClana + "," + " prezime clana: " + prezimeClana
-                + "," + " adresa clana: " + adresaClana + "," + " broj telefona clana: " + brojTelefonaClana + "," + 
-                " datum rodjenja clana: " + datumRodjenjaClana;
+                + "," + " adresa clana: " + adresaClana + "," + " broj telefona clana: " + brojTelefonaClana + ","
+                + " datum rodjenja clana: " + datumRodjenjaClana;
     }
 
     @Override
@@ -171,8 +177,6 @@ public class Clan extends OpstiDomenskiObjekat {
         hash = (int) (89 * hash + this.sifraClana);
         return hash;
     }
-
-    
 
     @Override
     public boolean equals(Object obj) {
@@ -188,7 +192,5 @@ public class Clan extends OpstiDomenskiObjekat {
         }
         return true;
     }
-    
-    
 
 }

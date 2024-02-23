@@ -4,7 +4,7 @@
  */
 package modeli;
 
-import domen.Clan;
+import domen.Zaduzenje;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -12,39 +12,40 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Lav
  */
-public class PrikazClanovaModel extends AbstractTableModel {
+public class PrikazZaduzenjaModel extends AbstractTableModel {
 
-    List<Clan> clanovi;
-
-    public PrikazClanovaModel(List<Clan> clanovi) {
-        this.clanovi = clanovi;
-    }
     
+    List<Zaduzenje> zaduzenja;
+
+    public PrikazZaduzenjaModel(List<Zaduzenje> zaduzenja) {
+        this.zaduzenja = zaduzenja;
+    }
     
     
     
     @Override
     public int getRowCount() {
-        
-        return clanovi.size();
+        return zaduzenja.size();
     }
 
     @Override
     public int getColumnCount() {
         
-        return 3;
+        return 4;
+        
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         
-        Clan clan = clanovi.get(rowIndex);
+        Zaduzenje z = zaduzenja.get(rowIndex);
         
         switch(columnIndex){
             
-            case 0: return clan.getSifraClana();
-            case 1: return clan.getImeClana();
-            case 2: return clan.getPrezimeClana();
+            case 0: return z.getSifraZaduzenja();
+            case 1: return z.getDatumPocetkaZaduzenja();
+            case 2: return z.getDatumZavrsetkaZaduzenja();
+            case 3: return z.getBrojKnjiga();
             default: return "n/a";
             
         }
@@ -56,22 +57,21 @@ public class PrikazClanovaModel extends AbstractTableModel {
         
         switch(column){
             
-            case 0: return "Sifra clana";
-            case 1: return "Ime clana";
-            case 2: return "Prezime clana";
+            case 0: return "Sifra zaduzenja";
+            case 1: return "Datum pocetka zaduzenja";
+            case 2: return "Datum zavrsetka zaduzenja";
+            case 3: return "Broj knjiga";
             default: return "n/a";
-                    
-                    
-            
         }
         
     }
     
-    public void updateTabele(int red){
+    public void updateTabele(){
         
-        clanovi.remove(red);
-        fireTableRowsDeleted(red, red);
+        fireTableDataChanged();
     }
+    
+    
     
     
 }

@@ -6,6 +6,7 @@ package logika;
 
 import domen.Knjiga;
 import domen.OpstiDomenskiObjekat;
+import domen.Zaduzenje;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -47,7 +48,7 @@ public class Kontroler {
 
     public List<Knjiga> vratiKnjige(Knjiga k) {
 
-        Zahtev zahtev = new Zahtev(k, Operacija.VRATI_KNJIGE);
+        Zahtev zahtev = new Zahtev(k, Operacija.NADJI_KNJIGE);
         posaljiZahtev(zahtev);
         Odgovor odgovor = primiOdgovor();
         List<Knjiga> rezultat = (List<Knjiga>) odgovor.getOdgovor();
@@ -58,7 +59,7 @@ public class Kontroler {
     
     public OpstiDomenskiObjekat vratiDetaljeKnjige(Knjiga knjiga){
         
-        Zahtev zahtev = new Zahtev(knjiga, Operacija.VRATI_DETALJE_KNJIGE);
+        Zahtev zahtev = new Zahtev(knjiga, Operacija.UCITAJ_KNJIGU);
         posaljiZahtev(zahtev);
         Odgovor odgovor = primiOdgovor();
         OpstiDomenskiObjekat opsti = (OpstiDomenskiObjekat) odgovor.getOdgovor();
@@ -90,5 +91,7 @@ public class Kontroler {
         }
 
     }
+    
+    
 
 }

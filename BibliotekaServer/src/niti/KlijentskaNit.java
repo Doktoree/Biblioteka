@@ -10,7 +10,9 @@ import domen.Clan;
 import domen.Knjiga;
 import domen.Korisnik;
 import domen.OpstiDomenskiObjekat;
+import domen.StavkaZaduzenja;
 import domen.StrucnaLiteratura;
+import domen.Zaduzenje;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -23,12 +25,15 @@ import konstante.Operacija;
 import liste.ListaPrijavljenih;
 import logika.Kontroler;
 import sistemske_operacije.clan.SONadjiClanove;
+import sistemske_operacije.clan.SOUcitajClana;
 import sistemske_operacije.knjiga.SONadjiKnjige;
 import sistemske_operacije.knjiga.SOObrisiKnjigu;
 import sistemske_operacije.knjiga.SOUcitajKnjigu;
+import sistemske_operacije.zaduzenje.SONadjiZaduzenja;
 import transfer.Odgovor;
 import transfer.Zahtev;
-
+import sistemske_operacije.clan.*;
+import sistemske_operacije.zaduzenje.*;
 /**
  *
  * @author Lav
@@ -70,49 +75,26 @@ public class KlijentskaNit extends Thread {
 
             switch (operacija) {
 
-                case VRATI_KNJIGE:
+                case NADJI_KNJIGE:
                     Knjiga k = (Knjiga) zahtev.getParametar();
-                    List<Knjiga> knjige = Kontroler.getInstanca().vratiKnjige(k);
-                    SONadjiKnjige nadji = new SONadjiKnjige(k, knjige);
-                    nadji.executeOperation();
-                    List<Knjiga> rezultat = nadji.getRezultat();
-                    odgovor.setOdgovor(rezultat);
+                    odgovor.setOdgovor(Kontroler.getInstanca().nadjiKnjige(k));
                     break;
 
-                case VRATI_DETALJE_KNJIGE:
-                    Knjiga ko = (Knjiga) zahtev.getParametar();
-                    SOUcitajKnjigu ucitaj = new SOUcitajKnjigu(ko);
-                    ucitaj.executeOperation();
-                    Beletristika bele;
-                    StrucnaLiteratura strucna;
-                    if (ucitaj.isJeBeletristika()) {
-                        bele = (Beletristika) ucitaj.getRezultat();
-                        odgovor.setOdgovor(bele);
-
-                    } else {
-                        strucna = (StrucnaLiteratura) ucitaj.getRezultat();
-                        odgovor.setOdgovor(strucna);
-
-                    }
+                case UCITAJ_KNJIGU:
+                    Knjiga knjigaZaUcitavanje = (Knjiga) zahtev.getParametar();
+                    odgovor.setOdgovor(Kontroler.getInstanca().ucitajKnjigu(knjigaZaUcitavanje));
                     break;
                     
                 case LOGIN:
-                    Korisnik prima = (Korisnik) zahtev.getParametar();
-                    
-                    Korisnik rez = Kontroler.getInstanca().proveriKorisnika(prima);
-                    
-                    if(rez == null){
-                        odgovor.setOdgovor(null);
-                    }
-                    else{
-                        odgovor.setOdgovor(rez);
-                        ListaPrijavljenih.getInstanca().dodaj(rez);
-                    }
+                    Korisnik korisnik = (Korisnik) zahtev.getParametar();                  
+                    Korisnik rez = Kontroler.getInstanca().proveriKorisnika(korisnik);
+                    odgovor.setOdgovor(rez);
                     break;
-                    
+                 //!!! kreiraj knjigu pogledati
                 case KREIRAJ_KNJIGU:
                     OpstiDomenskiObjekat ob = (OpstiDomenskiObjekat) zahtev.getParametar();
                     boolean b = Kontroler.getInstanca().sacuvajKnjigu(ob);
+                    System.out.println("Booolean b: " + b);
                     if(b){
                         odgovor.setOdgovor("ok");
                     }
@@ -123,23 +105,105 @@ public class KlijentskaNit extends Thread {
                     break;
 
                 case OBRISI_KNJIGU:
-                    Knjiga primKnjiga = (Knjiga) zahtev.getParametar();
-                    SOObrisiKnjigu obrisiKnjigu = new SOObrisiKnjigu(primKnjiga);
-                    obrisiKnjigu.executeOperation();
-                    boolean bl = obrisiKnjigu.isUspesno();
-                    odgovor.setOdgovor(bl);
+                    Knjiga knjigaZaBrisanje = (Knjiga) zahtev.getParametar();
+                    odgovor.setOdgovor(Kontroler.getInstanca().obrisiKnjigu(knjigaZaBrisanje));
                     break;
                     
-                case VRATI_DETALJE_CLANA:
-                    Clan clan = (Clan) zahtev.getParametar();
-                    List<Clan> clanovi = Kontroler.getInstanca().vratiClanove(clan);
-                    SONadjiClanove nadjiClanove = new SONadjiClanove(clanovi, clan);
-                    nadjiClanove.executeOperation();
-                    List<Clan> rezultatClanovi = nadjiClanove.getClanovi();
-                    odgovor.setOdgovor(rezultatClanovi);
+                case NADJI_CLANOVE:
+                    Clan clanZaPronalazenje = (Clan) zahtev.getParametar();
+                    odgovor.setOdgovor(Kontroler.getInstanca().nadjiClanove(clanZaPronalazenje));
                     break;
 
+                //!
+                case VRATI_SVA_ZADUZENJA_CLANA:
+                    Clan primClan = (Clan) zahtev.getParametar();
+                    Zaduzenje zaduzenje = new Zaduzenje();
+                    zaduzenje.setClan(primClan);
+                    SONadjiZaduzenja nadjiZaduzenja = new SONadjiZaduzenja(Kontroler.getInstanca().vratiSvaZaduzenja(), zaduzenje);
+                    nadjiZaduzenja.executeOperation();                   
+                    odgovor.setOdgovor(nadjiZaduzenja.getRezultat());
+                    break;
                     
+                case UCITAJ_CLANA:
+                    Clan clanZaUcitavanje = (Clan) zahtev.getParametar();
+                    odgovor.setOdgovor(Kontroler.getInstanca().ucitajClana(clanZaUcitavanje));
+                    break;
+                    
+                case OBRISI_CLANA:
+                    Clan clanZaBrisanje = (Clan) zahtev.getParametar();
+                    odgovor.setOdgovor(Kontroler.getInstanca().obrisiClana(clanZaBrisanje));
+                    break;
+                    
+                case KREIRAJ_CLANA:
+                    Clan clanZaKreiranje = (Clan) zahtev.getParametar();
+                    odgovor.setOdgovor(Kontroler.getInstanca().kreirajClana(clanZaKreiranje));
+                    break;
+                
+                case IZMENI_CLANA:
+                    Clan clanZaIzmenu = (Clan) zahtev.getParametar();
+                    SOZapamtiClana zapamtiClana2 = new SOZapamtiClana(clanZaIzmenu);
+                    zapamtiClana2.executeOperation();
+                    odgovor.setOdgovor(zapamtiClana2.isUspesno());
+                    break;
+                                 
+                    
+                case DODAJ_ZADUZENJE:
+                    Zaduzenje zaduzenje2 = (Zaduzenje) zahtev.getParametar();
+                    SOKreirajZaduzenje kreirajZad = new SOKreirajZaduzenje();
+                    kreirajZad.executeOperation();
+                    kreirajZad.setZaduzenje(zaduzenje2);
+                    SOZapamtiZaduzenje zapamtiZaduzenje = new SOZapamtiZaduzenje(kreirajZad.getZaduzenje());
+                    zapamtiZaduzenje.executeOperation();
+                    odgovor.setOdgovor(zapamtiZaduzenje.isUspesno());
+                    break;
+                 
+                case VRATI_ZADUZENJE:
+                    Zaduzenje zaduzenjeVrati = (Zaduzenje) zahtev.getParametar();
+                    SONadjiZaduzenja nadjiZaduzenja2 = new SONadjiZaduzenja(Kontroler.getInstanca().vratiSvaZaduzenja(), zaduzenjeVrati);
+                    nadjiZaduzenja2.executeOperation();
+                    Zaduzenje vratiZaduzenje = (Zaduzenje) nadjiZaduzenja2.getRezultat().get(nadjiZaduzenja2.getRezultat().size()-1);
+                    odgovor.setOdgovor(vratiZaduzenje);
+                    break;
+                 
+                case DODAJ_STAVKU_ZADUZENJA:
+                    StavkaZaduzenja stavkaZaduzenja = (StavkaZaduzenja) zahtev.getParametar();
+                    if(DbBroker.getInstanca().knjigaJeZauzeta(stavkaZaduzenja.getKnjiga())){
+                        System.out.println("^^^^^^^^^^^^^^^^^^^");
+                        odgovor.setOdgovor(Kontroler.getInstanca().sacuvajStavkuZaduzenja(stavkaZaduzenja));
+                    }
+                    else{
+                        odgovor.setOdgovor(false);
+                    }
+                    break;
+                    
+                case DODAJ_BROJ_KNJIGA:
+                    Zaduzenje zaduzenjeBrojKnjiga = (Zaduzenje) zahtev.getParametar();
+                    SONadjiZaduzenja nadjiZaduzenja3 = new SONadjiZaduzenja(Kontroler.getInstanca().vratiSvaZaduzenja(), zaduzenjeBrojKnjiga);
+                    nadjiZaduzenja3.executeOperation();
+                    odgovor.setOdgovor(Kontroler.getInstanca().updateBrojKnjigaZaduzenje((Zaduzenje) nadjiZaduzenja3.getRezultat().get(0)));
+                    break;
+                    
+                case PRODUZI_ROK:
+                    Zaduzenje zaduzenjeProduziRok = (Zaduzenje) zahtev.getParametar();
+                    boolean rok = Kontroler.getInstanca().updateZaduzenjeRok(zaduzenjeProduziRok);
+                    odgovor.setOdgovor(rok);
+                    break;
+                    
+                case VRATI_STAVKE:
+                    Zaduzenje zaduzenjeVratiStavku = (Zaduzenje) zahtev.getParametar();
+                    List<StavkaZaduzenja> listaStavki = DbBroker.getInstanca().vratiStavkeZaduzenja(zaduzenjeVratiStavku);
+                    odgovor.setOdgovor(listaStavki);
+                    break;
+                    
+                case KNJIGA_NIJE_AKTIVNA:
+                    StavkaZaduzenja stavkaAktivna = (StavkaZaduzenja) zahtev.getParametar();
+                    if(DbBroker.getInstanca().knjigaZauzeta(stavkaAktivna) && DbBroker.getInstanca().promeniStavkuNeAktivna(stavkaAktivna)){
+                        odgovor.setOdgovor(true);
+                    }
+                    else{
+                        odgovor.setOdgovor(false);
+                    }
+                    break;
             }
 
             posaljiOdgovor(odgovor);

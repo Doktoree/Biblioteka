@@ -66,6 +66,10 @@ public class PrikazKnjigaModel extends AbstractTableModel {
         }
     }
     
-    
+    public void updateTabele(int red){
+        
+        knjige.remove(red);
+        fireTableRowsDeleted(red, red);
+    }
     
 }

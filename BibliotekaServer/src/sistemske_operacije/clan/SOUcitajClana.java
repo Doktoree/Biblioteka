@@ -28,8 +28,7 @@ public class SOUcitajClana extends OpstaSO{
     @Override
     protected void executeSpecificOperation() throws Exception {
         
-       rez = (Clan) DbBroker.getInstanca().vratiOpstiDomenskiObjekatPrimarniKljuc(rez, rez.getSifraClana());
-         System.out.println("SO ucitajClana uspesno izvrsena!");
+       rez = (Clan) DbBroker.getInstanca().vratiOpstiDomenskiObjekatPrimarniKljuc(clan, clan.getSifraClana());
         
     }
 

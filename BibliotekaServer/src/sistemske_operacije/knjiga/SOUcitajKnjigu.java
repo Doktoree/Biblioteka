@@ -30,12 +30,9 @@ public class SOUcitajKnjigu extends OpstaSO {
     @Override
     protected void executeSpecificOperation() throws Exception {
 
-        if(DbBroker.getInstanca().vratiTipKnjige(knjiga.getSifraKnjige())){
+        if(DbBroker.getInstanca().vratiOpstiDomenskiObjekatPrimarniKljuc(new Beletristika(), knjiga.getSifraKnjige()) != null){
             rezultat = (OpstiDomenskiObjekat) DbBroker.getInstanca().vratiOpstiDomenskiObjekatPrimarniKljuc(new Beletristika(), knjiga.getSifraKnjige());
             jeBeletristika = true;
-            Beletristika b = (Beletristika) rezultat;
-            System.out.println("+++++++++++++: " + b.getOsvojeneNagrade());
-            System.out.println("+++++++++++++: " + b.getZanr());
         }
         else{
             rezultat = (OpstiDomenskiObjekat) DbBroker.getInstanca().vratiOpstiDomenskiObjekatPrimarniKljuc(new StrucnaLiteratura(), knjiga.getSifraKnjige());

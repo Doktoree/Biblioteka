@@ -1,15 +1,18 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package forme;
 
 import domen.Clan;
+import domen.Zaduzenje;
 import java.time.LocalDate;
 import java.util.List;
+import javax.swing.JOptionPane;
 import konstante.Operacija;
 import logika.Kontroler;
 import modeli.PrikazClanovaModel;
+import modeli.PrikazZaduzenjaModel;
 import transfer.Odgovor;
 import transfer.Zahtev;
 
@@ -17,14 +20,15 @@ import transfer.Zahtev;
  *
  * @author Lav
  */
-public class PretragaClanovaForm extends javax.swing.JDialog {
+public class PretragaClanovaForm2 extends javax.swing.JFrame {
 
+    PrikazClanovaModel prikaz;
     /**
-     * Creates new form PretragaClanovaForm
+     * Creates new form PretragaClanovaForm2
      */
-    public PretragaClanovaForm(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public PretragaClanovaForm2() {
         initComponents();
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -36,7 +40,6 @@ public class PretragaClanovaForm extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -46,12 +49,12 @@ public class PretragaClanovaForm extends javax.swing.JDialog {
         btnPretrazi = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblTabelaClanovi = new javax.swing.JTable();
-        btnPretrazi1 = new javax.swing.JButton();
+        btnDetalji = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        btnObrisiClana = new javax.swing.JButton();
+        btnIzmeniClana = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-        jLabel1.setText("Pretraživanje članova");
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel2.setText("Šifra člana:");
 
@@ -86,10 +89,27 @@ public class PretragaClanovaForm extends javax.swing.JDialog {
         });
         jScrollPane3.setViewportView(tblTabelaClanovi);
 
-        btnPretrazi1.setText("Detalji");
-        btnPretrazi1.addActionListener(new java.awt.event.ActionListener() {
+        btnDetalji.setText("Detalji");
+        btnDetalji.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPretrazi1ActionPerformed(evt);
+                btnDetaljiActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        jLabel1.setText("Pretraživanje članova");
+
+        btnObrisiClana.setText("Obriši člana");
+        btnObrisiClana.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnObrisiClanaActionPerformed(evt);
+            }
+        });
+
+        btnIzmeniClana.setText("Izmeni člana");
+        btnIzmeniClana.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIzmeniClanaActionPerformed(evt);
             }
         });
 
@@ -99,8 +119,13 @@ public class PretragaClanovaForm extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnPretrazi1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnObrisiClana, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnIzmeniClana, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnDetalji, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(btnPretrazi, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -120,7 +145,7 @@ public class PretragaClanovaForm extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtSifraClana)))
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(95, Short.MAX_VALUE))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -144,8 +169,11 @@ public class PretragaClanovaForm extends javax.swing.JDialog {
                 .addGap(77, 77, 77)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
-                .addComponent(btnPretrazi1)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDetalji)
+                    .addComponent(btnObrisiClana)
+                    .addComponent(btnIzmeniClana))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
@@ -161,31 +189,89 @@ public class PretragaClanovaForm extends javax.swing.JDialog {
             sifra = Long.valueOf(txtSifraClana.getText());
         }
         System.out.println("sifra: " + sifra);
-        
+
         String ime = txtImeClana.getText();
         String prezime = txtPrezimeClana.getText();
         Clan clan = new Clan(sifra, ime, prezime, "", "", LocalDate.MIN);
-        Zahtev zahtev = new Zahtev(clan, Operacija.VRATI_DETALJE_CLANA);
+        Zahtev zahtev = new Zahtev(clan, Operacija.NADJI_CLANOVE);
         Kontroler.getInstanca().posaljiZahtev(zahtev);
         Odgovor odgovor = Kontroler.getInstanca().primiOdgovor();
         List<Clan> clanovi = (List<Clan>) odgovor.getOdgovor();
-        PrikazClanovaModel prikaz = new PrikazClanovaModel(clanovi);
+        prikaz = new PrikazClanovaModel(clanovi);
         tblTabelaClanovi.setModel(prikaz);
-        
 
     }//GEN-LAST:event_btnPretraziActionPerformed
 
-    private void btnPretrazi1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPretrazi1ActionPerformed
+    private void btnDetaljiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetaljiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnPretrazi1ActionPerformed
+
+        int red = tblTabelaClanovi.getSelectedRow();
+        Long sifra = (Long) tblTabelaClanovi.getValueAt(red, 0);
+        Clan clan = new Clan(sifra);
+        Zahtev zahtev = new Zahtev(clan, Operacija.VRATI_SVA_ZADUZENJA_CLANA);
+        Kontroler.getInstanca().posaljiZahtev(zahtev);
+        Odgovor odgovor = Kontroler.getInstanca().primiOdgovor();
+        List<Zaduzenje> listaZaduzenja = (List<Zaduzenje>) odgovor.getOdgovor();
+        Zahtev zahtev2 = new Zahtev(clan, Operacija.UCITAJ_CLANA);
+        Kontroler.getInstanca().posaljiZahtev(zahtev2);
+        Odgovor odgovor2 = Kontroler.getInstanca().primiOdgovor();
+        Clan primaClan = (Clan) odgovor2.getOdgovor();
+        new DetaljiClanaForm(this, true, listaZaduzenja, primaClan,false).setVisible(true);
+        
+
+    }//GEN-LAST:event_btnDetaljiActionPerformed
+
+    private void btnObrisiClanaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObrisiClanaActionPerformed
+        // TODO add your handling code here:
+        
+        int red = tblTabelaClanovi.getSelectedRow();
+        Long sifra = (Long) tblTabelaClanovi.getValueAt(red, 0);
+        Clan clan = new Clan(sifra);
+        Zahtev zahtev = new Zahtev(clan, Operacija.OBRISI_CLANA);
+        Kontroler.getInstanca().posaljiZahtev(zahtev);
+        Odgovor odgovor = Kontroler.getInstanca().primiOdgovor();
+        boolean b = (boolean) odgovor.getOdgovor();
+        
+        if(b){
+            
+            JOptionPane.showMessageDialog(rootPane, "Clan je uspesno obrisan!");
+            tblTabelaClanovi.remove(this);
+            prikaz.updateTabele(tblTabelaClanovi.getSelectedRow());
+            return;
+        }
+        
+        JOptionPane.showMessageDialog(rootPane, "Clan ne moze da se obrise!");
+                
+        
+        
+    }//GEN-LAST:event_btnObrisiClanaActionPerformed
+
+    private void btnIzmeniClanaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIzmeniClanaActionPerformed
+        // TODO add your handling code here:
+        int red = tblTabelaClanovi.getSelectedRow();
+        Long sifra = (Long) tblTabelaClanovi.getValueAt(red, 0);
+        Clan clan = new Clan(sifra);
+        Zahtev zahtev = new Zahtev(clan, Operacija.VRATI_SVA_ZADUZENJA_CLANA);
+        Kontroler.getInstanca().posaljiZahtev(zahtev);
+        Odgovor odgovor = Kontroler.getInstanca().primiOdgovor();
+        List<Zaduzenje> listaZaduzenja = (List<Zaduzenje>) odgovor.getOdgovor();
+        Zahtev zahtev2 = new Zahtev(clan, Operacija.UCITAJ_CLANA);
+        Kontroler.getInstanca().posaljiZahtev(zahtev2);
+        Odgovor odgovor2 = Kontroler.getInstanca().primiOdgovor();
+        Clan primaClan = (Clan) odgovor2.getOdgovor();
+        new DetaljiClanaForm(this, true, listaZaduzenja, primaClan,true).setVisible(true);
+    }//GEN-LAST:event_btnIzmeniClanaActionPerformed
 
     /**
      * @param args the command line arguments
      */
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDetalji;
+    private javax.swing.JButton btnIzmeniClana;
+    private javax.swing.JButton btnObrisiClana;
     private javax.swing.JButton btnPretrazi;
-    private javax.swing.JButton btnPretrazi1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

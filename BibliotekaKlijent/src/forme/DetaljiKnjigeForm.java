@@ -457,6 +457,7 @@ public class DetaljiKnjigeForm extends javax.swing.JDialog {
             txtTema.setEditable(true);
             txtOsvojeneNagrade.setEditable(true);
             btnObrisiKnjigu.setVisible(false);
+            lblZauzeta.setVisible(false);
 
         
 
