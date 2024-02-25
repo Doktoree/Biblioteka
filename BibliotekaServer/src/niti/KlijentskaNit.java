@@ -34,6 +34,7 @@ import transfer.Odgovor;
 import transfer.Zahtev;
 import sistemske_operacije.clan.*;
 import sistemske_operacije.zaduzenje.*;
+
 /**
  *
  * @author Lav
@@ -84,31 +85,30 @@ public class KlijentskaNit extends Thread {
                     Knjiga knjigaZaUcitavanje = (Knjiga) zahtev.getParametar();
                     odgovor.setOdgovor(Kontroler.getInstanca().ucitajKnjigu(knjigaZaUcitavanje));
                     break;
-                    
+
                 case LOGIN:
-                    Korisnik korisnik = (Korisnik) zahtev.getParametar();                  
+                    Korisnik korisnik = (Korisnik) zahtev.getParametar();
                     Korisnik rez = Kontroler.getInstanca().proveriKorisnika(korisnik);
                     odgovor.setOdgovor(rez);
                     break;
-                 //!!! kreiraj knjigu pogledati
+                //!!! kreiraj knjigu pogledati
                 case KREIRAJ_KNJIGU:
                     OpstiDomenskiObjekat ob = (OpstiDomenskiObjekat) zahtev.getParametar();
                     boolean b = Kontroler.getInstanca().sacuvajKnjigu(ob);
                     System.out.println("Booolean b: " + b);
-                    if(b){
+                    if (b) {
                         odgovor.setOdgovor("ok");
-                    }
-                    else{
+                    } else {
                         odgovor.setOdgovor("ne");
                     }
-            
+
                     break;
 
                 case OBRISI_KNJIGU:
                     Knjiga knjigaZaBrisanje = (Knjiga) zahtev.getParametar();
                     odgovor.setOdgovor(Kontroler.getInstanca().obrisiKnjigu(knjigaZaBrisanje));
                     break;
-                    
+
                 case NADJI_CLANOVE:
                     Clan clanZaPronalazenje = (Clan) zahtev.getParametar();
                     odgovor.setOdgovor(Kontroler.getInstanca().nadjiClanove(clanZaPronalazenje));
@@ -120,87 +120,65 @@ public class KlijentskaNit extends Thread {
                     Zaduzenje zaduzenje = new Zaduzenje();
                     zaduzenje.setClan(primClan);
                     SONadjiZaduzenja nadjiZaduzenja = new SONadjiZaduzenja(Kontroler.getInstanca().vratiSvaZaduzenja(), zaduzenje);
-                    nadjiZaduzenja.executeOperation();                   
+                    nadjiZaduzenja.executeOperation();
                     odgovor.setOdgovor(nadjiZaduzenja.getRezultat());
                     break;
-                    
+
                 case UCITAJ_CLANA:
                     Clan clanZaUcitavanje = (Clan) zahtev.getParametar();
                     odgovor.setOdgovor(Kontroler.getInstanca().ucitajClana(clanZaUcitavanje));
                     break;
-                    
+
                 case OBRISI_CLANA:
                     Clan clanZaBrisanje = (Clan) zahtev.getParametar();
                     odgovor.setOdgovor(Kontroler.getInstanca().obrisiClana(clanZaBrisanje));
                     break;
-                    
+
                 case KREIRAJ_CLANA:
                     Clan clanZaKreiranje = (Clan) zahtev.getParametar();
                     odgovor.setOdgovor(Kontroler.getInstanca().kreirajClana(clanZaKreiranje));
                     break;
-                
+
                 case IZMENI_CLANA:
                     Clan clanZaIzmenu = (Clan) zahtev.getParametar();
-                    SOZapamtiClana zapamtiClana2 = new SOZapamtiClana(clanZaIzmenu);
-                    zapamtiClana2.executeOperation();
-                    odgovor.setOdgovor(zapamtiClana2.isUspesno());
+                    odgovor.setOdgovor(Kontroler.getInstanca().izmeniClana(clanZaIzmenu));
                     break;
-                                 
-                    
-                case DODAJ_ZADUZENJE:
-                    Zaduzenje zaduzenje2 = (Zaduzenje) zahtev.getParametar();
-                    SOKreirajZaduzenje kreirajZad = new SOKreirajZaduzenje();
-                    kreirajZad.executeOperation();
-                    kreirajZad.setZaduzenje(zaduzenje2);
-                    SOZapamtiZaduzenje zapamtiZaduzenje = new SOZapamtiZaduzenje(kreirajZad.getZaduzenje());
-                    zapamtiZaduzenje.executeOperation();
-                    odgovor.setOdgovor(zapamtiZaduzenje.isUspesno());
+
+                case KREIRAJ_ZADUZENJE:
+                    Zaduzenje zaduzenjeZaKreiranje = (Zaduzenje) zahtev.getParametar();
+                    odgovor.setOdgovor(Kontroler.getInstanca().kreirajZaduzenje(zaduzenjeZaKreiranje));
                     break;
-                 
-                case VRATI_ZADUZENJE:
+
+                case VRATI_POSLEDNJE_ZADUZENJE:
                     Zaduzenje zaduzenjeVrati = (Zaduzenje) zahtev.getParametar();
-                    SONadjiZaduzenja nadjiZaduzenja2 = new SONadjiZaduzenja(Kontroler.getInstanca().vratiSvaZaduzenja(), zaduzenjeVrati);
-                    nadjiZaduzenja2.executeOperation();
-                    Zaduzenje vratiZaduzenje = (Zaduzenje) nadjiZaduzenja2.getRezultat().get(nadjiZaduzenja2.getRezultat().size()-1);
-                    odgovor.setOdgovor(vratiZaduzenje);
+                    odgovor.setOdgovor(Kontroler.getInstanca().vratiPoslednjeZaduzenjeClana(zaduzenjeVrati));
                     break;
-                 
+
                 case DODAJ_STAVKU_ZADUZENJA:
                     StavkaZaduzenja stavkaZaduzenja = (StavkaZaduzenja) zahtev.getParametar();
-                    if(DbBroker.getInstanca().knjigaJeZauzeta(stavkaZaduzenja.getKnjiga())){
-                        System.out.println("^^^^^^^^^^^^^^^^^^^");
-                        odgovor.setOdgovor(Kontroler.getInstanca().sacuvajStavkuZaduzenja(stavkaZaduzenja));
-                    }
-                    else{
-                        odgovor.setOdgovor(false);
-                    }
+                    odgovor.setOdgovor(Kontroler.getInstanca().sacuvajStavkuZaduzenja(stavkaZaduzenja));
                     break;
-                    
+
                 case DODAJ_BROJ_KNJIGA:
                     Zaduzenje zaduzenjeBrojKnjiga = (Zaduzenje) zahtev.getParametar();
-                    SONadjiZaduzenja nadjiZaduzenja3 = new SONadjiZaduzenja(Kontroler.getInstanca().vratiSvaZaduzenja(), zaduzenjeBrojKnjiga);
-                    nadjiZaduzenja3.executeOperation();
-                    odgovor.setOdgovor(Kontroler.getInstanca().updateBrojKnjigaZaduzenje((Zaduzenje) nadjiZaduzenja3.getRezultat().get(0)));
+                    odgovor.setOdgovor(Kontroler.getInstanca().updateBrojKnjigaZaduzenje(zaduzenjeBrojKnjiga));
                     break;
-                    
+
                 case PRODUZI_ROK:
                     Zaduzenje zaduzenjeProduziRok = (Zaduzenje) zahtev.getParametar();
-                    boolean rok = Kontroler.getInstanca().updateZaduzenjeRok(zaduzenjeProduziRok);
-                    odgovor.setOdgovor(rok);
+                    odgovor.setOdgovor(Kontroler.getInstanca().updateZaduzenjeRok(zaduzenjeProduziRok));
                     break;
-                    
+
                 case VRATI_STAVKE:
                     Zaduzenje zaduzenjeVratiStavku = (Zaduzenje) zahtev.getParametar();
-                    List<StavkaZaduzenja> listaStavki = DbBroker.getInstanca().vratiStavkeZaduzenja(zaduzenjeVratiStavku);
-                    odgovor.setOdgovor(listaStavki);
+                    odgovor.setOdgovor(Kontroler.getInstanca().vratiStavkeZaduzenja(zaduzenjeVratiStavku));
                     break;
-                    
+
                 case KNJIGA_NIJE_AKTIVNA:
                     StavkaZaduzenja stavkaAktivna = (StavkaZaduzenja) zahtev.getParametar();
-                    if(DbBroker.getInstanca().knjigaZauzeta(stavkaAktivna) && DbBroker.getInstanca().promeniStavkuNeAktivna(stavkaAktivna)){
+                    if (DbBroker.getInstanca().knjigaZauzeta(stavkaAktivna) && DbBroker.getInstanca().promeniStavkuNeAktivna(stavkaAktivna)) {
                         odgovor.setOdgovor(true);
-                    }
-                    else{
+                    } else {
                         odgovor.setOdgovor(false);
                     }
                     break;

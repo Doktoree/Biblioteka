@@ -164,10 +164,10 @@ public class DbBroker {
         Statement statement = connection.createStatement();
         ResultSet rs = statement.executeQuery(query);
         List<OpstiDomenskiObjekat> lista = o.konvertujRSUListu(rs);
-        if(lista.isEmpty()){
+        if (lista.isEmpty()) {
             return null;
         }
-        
+
         return lista.get(0);
 
     }
@@ -176,7 +176,7 @@ public class DbBroker {
 
         try {
             String query = "";
-            
+
             if (o.getSlozeniPrimarniKljuc() == null) {
                 query = "DELETE FROM " + o.getNazivTabele() + " WHERE " + o.getNazivPrimarnogKljuca() + "=" + o.getVrednostPrimarnogKljuca();
             } else {
@@ -196,8 +196,24 @@ public class DbBroker {
 
     }
 
-    
-    
+    public Zaduzenje vratiPoslednjeZaduzenjeClana(Zaduzenje zaduzenje) {
+
+        uspostaviKonekciju();
+        String query = "SELECT * FROM zaduzenje WHERE sifra_clana = " + zaduzenje.getClan().getSifraClana() + " ORDER BY sifra_zaduzenja DESC";
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            List<OpstiDomenskiObjekat> zaduzenja = new Zaduzenje().konvertujRSUListu(rs);
+            System.out.println("Uspesno vraceno poslednje zaduzenje!");
+            zatvoriKonekciju();
+            return (Zaduzenje)zaduzenja.get(0);
+        } catch (SQLException ex) {
+            System.out.println("Nije moguce vratiti poslednje zaduzenje!");
+            Logger.getLogger(DbBroker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     public synchronized boolean vratiTipKnjige(long id) {
 
         String query1 = "SELECT * FROM beletristika WHERE sifra_knjige = " + id;
@@ -309,10 +325,9 @@ public class DbBroker {
 
         return null;
     }
-    
-    
-    public synchronized Zaduzenje vratiZaduzenjeBezPK(Zaduzenje zaduzenje){
-        
+
+    public synchronized Zaduzenje vratiZaduzenjeBezPK(Zaduzenje zaduzenje) {
+
         String query = "SELECT * FROM zaduzenje WHERE datum_pocetka_zaduzenja = ? AND datum_zavrsetka_zaduzenja = ? AND"
                 + " broj_knjiga = ? AND sifra_clana = ?";
         try {
@@ -327,64 +342,61 @@ public class DbBroker {
         } catch (SQLException ex) {
             Logger.getLogger(DbBroker.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return null;
     }
 
-    
-     public synchronized boolean updateBrojKnjigaZaduzenje(Zaduzenje zad){
-        
+    public synchronized Zaduzenje updateBrojKnjigaZaduzenje(Zaduzenje zad) {
+
         int broj = zad.getBrojKnjiga() + 1;
         String query = "UPDATE zaduzenje SET broj_knjiga = " + broj + " WHERE sifra_zaduzenja = " + zad.getSifraZaduzenja();
-         System.out.println("query");
+        System.out.println("query");
+        zad.setBrojKnjiga(broj);
+        Zaduzenje zaduzenje = zad;
         Statement statement;
         try {
             statement = connection.createStatement();
-             int r = statement.executeUpdate(query);
-             System.out.println("query update: " + query);
-             System.out.println("Uspeno izvrsen update knjiga!");
-             return true;
+            int r = statement.executeUpdate(query);
+            System.out.println("query update: " + query);
+            System.out.println("Uspeno izvrsen update knjiga!");
+            return zaduzenje;
         } catch (SQLException ex) {
             System.out.println("Nije uspeno izvrsen update knjiga!");
-            return false;
+            return null;
         }
-       
-        
+
     }
-     
-     
-     public synchronized List<StavkaZaduzenja> vratiStavkeZaduzenja(Zaduzenje zaduzenje){
-        
+
+    public synchronized List<StavkaZaduzenja> vratiStavkeZaduzenja(Zaduzenje zaduzenje) {
+
         DbBroker.getInstanca().uspostaviKonekciju();
-        
-        String query = "SELECT * FROM stavka_zaduzenja WHERE sifra_zaduzenja = " + zaduzenje.getSifraZaduzenja() +  " AND stanje ='aktivno' ";
-        
-         System.out.println("Query: " +query);
+
+        String query = "SELECT * FROM stavka_zaduzenja WHERE sifra_zaduzenja = " + zaduzenje.getSifraZaduzenja() + " AND stanje ='aktivno' ";
+
+        System.out.println("Query: " + query);
         try {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
             List<OpstiDomenskiObjekat> lista = new StavkaZaduzenja().konvertujRSUListu(rs);
             List<StavkaZaduzenja> listaStavki = new ArrayList<>();
-            for(OpstiDomenskiObjekat o: lista){
-                
+            for (OpstiDomenskiObjekat o : lista) {
+
                 StavkaZaduzenja s = (StavkaZaduzenja) o;
                 listaStavki.add(s);
             }
-            
+
             System.out.println("Uspesno vracena lista Stavki!");
             return listaStavki;
         } catch (SQLException ex) {
             System.out.println("Nije uspesno vracena lista Stavki!");
             return null;
         }
-        
-        
+
     }
-     
-     
-     public boolean knjigaZauzeta(StavkaZaduzenja s){
-         
-         String query = "UPDATE knjiga SET je_zauzeta = false WHERE sifra_knjige = " + s.getKnjiga().getSifraKnjige();
+
+    public boolean knjigaZauzeta(StavkaZaduzenja s) {
+
+        String query = "UPDATE knjiga SET je_zauzeta = false WHERE sifra_knjige = " + s.getKnjiga().getSifraKnjige();
         try {
             DbBroker.getInstanca().uspostaviKonekciju();
             Statement statement = connection.createStatement();
@@ -394,20 +406,18 @@ public class DbBroker {
             DbBroker.getInstanca().zatvoriKonekciju();
             return true;
         } catch (SQLException ex) {
-            
+
             System.out.println("Nije uspesno izvrsen update knjige");
             return false;
         }
-         
-         
-     }
-     
-     
-     public boolean promeniStavkuNeAktivna(StavkaZaduzenja s){
-         
-         String query = "UPDATE stavka_zaduzenja SET stanje = 'neaktivno' WHERE sifra_stavke_zaduzenja = " + s.getSifraStavkeZaduzenja();
-         try {
-             DbBroker.getInstanca().uspostaviKonekciju();
+
+    }
+
+    public boolean promeniStavkuNeAktivna(StavkaZaduzenja s) {
+
+        String query = "UPDATE stavka_zaduzenja SET stanje = 'neaktivno' WHERE sifra_stavke_zaduzenja = " + s.getSifraStavkeZaduzenja();
+        try {
+            DbBroker.getInstanca().uspostaviKonekciju();
             Statement statement = connection.createStatement();
             int broj = statement.executeUpdate(query);
             System.out.println("Uspesno izvrsen update stavke");
@@ -415,32 +425,31 @@ public class DbBroker {
             DbBroker.getInstanca().zatvoriKonekciju();
             return true;
         } catch (SQLException ex) {
-            
+
             System.out.println("Nije uspesno izvrsen update stavke");
             return false;
         }
-         
-     }
-     
-     
-     public boolean knjigaJeZauzeta(Knjiga knjiga){
-        
-         uspostaviKonekciju();
+
+    }
+
+    public boolean knjigaJeZauzeta(Knjiga knjiga) {
+
+        uspostaviKonekciju();
         String query = "SELECT * FROM knjiga WHERE sifra_knjige = " + knjiga.getSifraKnjige() + " AND je_zauzeta = TRUE";
-         System.out.println("query: " + query);
+        System.out.println("query: " + query);
         try {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
             List<OpstiDomenskiObjekat> lista = knjiga.konvertujRSUListu(rs);
-            System.out.println("&&&&&&&&&&& lista.size "  + lista.size());
+            System.out.println("&&&&&&&&&&& lista.size " + lista.size());
             zatvoriKonekciju();
-            if(lista.size() > 0){
+            if (lista.size() > 0) {
                 return false;
             }
             return true;
         } catch (SQLException ex) {
             return true;
         }
-        
+
     }
 }

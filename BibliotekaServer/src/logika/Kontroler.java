@@ -29,6 +29,9 @@ import sistemske_operacije.clan.SOObrisiClana;
 import sistemske_operacije.clan.SOUcitajClana;
 import sistemske_operacije.clan.SOZapamtiClana;
 import sistemske_operacije.knjiga.*;
+import sistemske_operacije.zaduzenje.SOKreirajZaduzenje;
+import sistemske_operacije.zaduzenje.SONadjiZaduzenja;
+import sistemske_operacije.zaduzenje.SOZapamtiZaduzenje;
 
 /**
  *
@@ -79,27 +82,26 @@ public class Kontroler {
 
     }
 
-    public List<OpstiDomenskiObjekat> nadjiKnjige(Knjiga knjiga) throws Exception {
-
+    public synchronized List<OpstiDomenskiObjekat> nadjiKnjige(Knjiga knjiga) throws Exception {
 
         SONadjiKnjige soNadjiKnjige = new SONadjiKnjige(knjiga);
         soNadjiKnjige.executeOperation();
         return soNadjiKnjige.getRezultat();
-        
+
     }
-    
-    
-    public OpstiDomenskiObjekat ucitajKnjigu(Knjiga knjiga) throws Exception{
-        
+
+    public synchronized OpstiDomenskiObjekat ucitajKnjigu(Knjiga knjiga) throws Exception {
+
         SOUcitajKnjigu soUcitajKnjigu = new SOUcitajKnjigu(knjiga);
         soUcitajKnjigu.executeOperation();
-        if(soUcitajKnjigu.isJeBeletristika()){
-            return (Beletristika)soUcitajKnjigu.getRezultat();
+        if (soUcitajKnjigu.isJeBeletristika()) {
+            return (Beletristika) soUcitajKnjigu.getRezultat();
         }
-        return (StrucnaLiteratura)soUcitajKnjigu.getRezultat();
-        
+        return (StrucnaLiteratura) soUcitajKnjigu.getRezultat();
+
     }
-    public boolean kreirajClana() throws Exception {
+
+    public synchronized boolean kreirajClana() throws Exception {
 
         SOKreirajClana k = new SOKreirajClana();
         k.executeOperation();
@@ -107,7 +109,7 @@ public class Kontroler {
 
     }
 
-    public boolean zapamtiClana(Clan clan) throws Exception {
+    public synchronized boolean zapamtiClana(Clan clan) throws Exception {
 
         SOZapamtiClana z = new SOZapamtiClana(clan);
         z.executeOperation();
@@ -115,17 +117,17 @@ public class Kontroler {
 
     }
 
-    public Korisnik proveriKorisnika(Korisnik korisnik) {
+    public synchronized Korisnik proveriKorisnika(Korisnik korisnik) {
 
         Korisnik rezultat = DbBroker.getInstanca().vratiKorisnika(korisnik);
-        if(rezultat != null){
+        if (rezultat != null) {
             ListaPrijavljenih.getInstanca().dodaj(korisnik);
         }
         return rezultat;
 
     }
 
-    public boolean sacuvajKnjigu(OpstiDomenskiObjekat o) throws Exception {
+    public synchronized boolean sacuvajKnjigu(OpstiDomenskiObjekat o) throws Exception {
 
         Beletristika bele;
         StrucnaLiteratura strucna;
@@ -178,53 +180,120 @@ public class Kontroler {
         return false;
 
     }
-    
-    public boolean obrisiKnjigu(Knjiga knjiga) throws Exception{
-        
+
+    public synchronized boolean obrisiKnjigu(Knjiga knjiga) throws Exception {
+
         SOObrisiKnjigu soObrisiKnjigu = new SOObrisiKnjigu(knjiga);
         soObrisiKnjigu.executeOperation();
         return soObrisiKnjigu.isUspesno();
-        
-        
+
     }
-    
-    public List<Clan> nadjiClanove(Clan clan) throws Exception{
-        
+
+    public synchronized List<Clan> nadjiClanove(Clan clan) throws Exception {
+
         List<OpstiDomenskiObjekat> clanovi = DbBroker.getInstanca().vratiOpsteDomenskeObjekte(new Clan());
         SONadjiClanove soNadjiClanove = new SONadjiClanove(clanovi, clan);
         soNadjiClanove.executeOperation();
         return soNadjiClanove.getClanovi();
-        
+
     }
-    
-    public Clan ucitajClana(Clan clan) throws Exception{
-        
+
+    public synchronized Clan ucitajClana(Clan clan) throws Exception {
+
         SOUcitajClana soUcitajClana = new SOUcitajClana(clan);
         soUcitajClana.executeOperation();
         return soUcitajClana.getClan();
-        
+
     }
 
-    public boolean obrisiClana(Clan clan) throws Exception{
-        
+    public synchronized boolean obrisiClana(Clan clan) throws Exception {
+
         SOObrisiClana soObrisiClana = new SOObrisiClana(clan);
         soObrisiClana.executeOperation();
         return soObrisiClana.isUspesno();
-        
-        
+
     }
-    
-    public boolean kreirajClana(Clan clan) throws Exception{
-        
+
+    public synchronized boolean kreirajClana(Clan clan) throws Exception {
+
         SOKreirajClana sOKreirajClana = new SOKreirajClana();
         sOKreirajClana.executeOperation();
         sOKreirajClana.setClan(clan);
         SOZapamtiClana soZapamtiClana = new SOZapamtiClana(sOKreirajClana.getClan());
         soZapamtiClana.executeOperation();
-        return soZapamtiClana.isUspesno();         
+        return soZapamtiClana.isUspesno();
+
+    }
+
+    public synchronized boolean izmeniClana(Clan clan) throws Exception {
+
+        SOZapamtiClana soZapamtiClana = new SOZapamtiClana(clan);
+        soZapamtiClana.executeOperation();
+        return soZapamtiClana.isUspesno();
+
+    }
+
+    public synchronized boolean kreirajZaduzenje(Zaduzenje zaduzenje) throws Exception {
+
+        SOKreirajZaduzenje soKreirajZaduzenje = new SOKreirajZaduzenje();
+        soKreirajZaduzenje.executeOperation();
+        soKreirajZaduzenje.setZaduzenje(zaduzenje);
+        SOZapamtiZaduzenje soZapamtiZaduzenje = new SOZapamtiZaduzenje(soKreirajZaduzenje.getZaduzenje());
+        soZapamtiZaduzenje.executeOperation();
+        return soZapamtiZaduzenje.isUspesno();
+
+    }
+
+    public synchronized Zaduzenje vratiPoslednjeZaduzenjeClana(Zaduzenje zaduzenje) {
+
+        return DbBroker.getInstanca().vratiPoslednjeZaduzenjeClana(zaduzenje);
+
+    }
+
+    public synchronized boolean dodajStavkuZaduzenja(StavkaZaduzenja stavka) {
+
+        if (DbBroker.getInstanca().knjigaJeZauzeta(stavka.getKnjiga())) {
+            sacuvajStavkuZaduzenja(stavka);
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public synchronized Zaduzenje updateBrojKnjigaZaduzenje(Zaduzenje zad) {
+
+        DbBroker.getInstanca().uspostaviKonekciju();
+        Zaduzenje zaduzenje = DbBroker.getInstanca().updateBrojKnjigaZaduzenje(zad);
+        DbBroker.getInstanca().commit();
+        DbBroker.getInstanca().zatvoriKonekciju();
+        return zaduzenje;
+    }
+
+     public synchronized boolean updateZaduzenjeRok(Zaduzenje zad) {
+
+        DbBroker.getInstanca().uspostaviKonekciju();
+        boolean b;
+        try {
+            b = DbBroker.getInstanca().updateOpstiDomenskiObjekat(zad);
+            DbBroker.getInstanca().commit();
+            DbBroker.getInstanca().zatvoriKonekciju();
+            return b;
+        } catch (SQLException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
+     
+    public synchronized List<StavkaZaduzenja> vratiStavkeZaduzenja(Zaduzenje zaduzenje){
+        
+        DbBroker.getInstanca().uspostaviKonekciju();
+        List<StavkaZaduzenja> stavkaZaduzenje = DbBroker.getInstanca().vratiStavkeZaduzenja(zaduzenje);
+        DbBroker.getInstanca().zatvoriKonekciju();
+        return stavkaZaduzenje;
         
     }
-    
     public List<Clan> vratiClanove(Clan clan) {
 
         List<OpstiDomenskiObjekat> lista;
@@ -251,7 +320,7 @@ public class Kontroler {
 
     }
 
-    public List<OpstiDomenskiObjekat> vratiSvaZaduzenja() {
+    public synchronized List<OpstiDomenskiObjekat> vratiSvaZaduzenja() {
 
         List<OpstiDomenskiObjekat> lista;
 
@@ -270,7 +339,7 @@ public class Kontroler {
         return null;
     }
 
-    public boolean sacuvajStavkeZaduzenja(List<StavkaZaduzenja> stavke) {
+    public synchronized boolean sacuvajStavkeZaduzenja(List<StavkaZaduzenja> stavke) {
 
         for (StavkaZaduzenja s : stavke) {
 
@@ -286,9 +355,6 @@ public class Kontroler {
         return true;
     }
 
-    
-    
-    
     public synchronized boolean sacuvajStavkuZaduzenja(StavkaZaduzenja stavka) {
 
         try {
@@ -303,30 +369,6 @@ public class Kontroler {
         return false;
     }
 
-    public synchronized boolean updateBrojKnjigaZaduzenje(Zaduzenje zad) {
+   
 
-        DbBroker.getInstanca().uspostaviKonekciju();
-        boolean b = DbBroker.getInstanca().updateBrojKnjigaZaduzenje(zad);
-        DbBroker.getInstanca().commit();
-        DbBroker.getInstanca().zatvoriKonekciju();
-        return b;
-    }
-
-    public synchronized boolean updateZaduzenjeRok(Zaduzenje zad) {
-
-        DbBroker.getInstanca().uspostaviKonekciju();
-        boolean b;
-        try {
-            b = DbBroker.getInstanca().updateOpstiDomenskiObjekat(zad);
-            DbBroker.getInstanca().commit();
-            DbBroker.getInstanca().zatvoriKonekciju();
-            return b;
-        } catch (SQLException ex) {
-            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return false;
-    }
-    
-    
 }

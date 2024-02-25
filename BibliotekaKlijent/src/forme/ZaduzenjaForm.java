@@ -24,9 +24,9 @@ import transfer.Zahtev;
 public class ZaduzenjaForm extends javax.swing.JFrame {
 
     Clan clan;
-     List<StavkaZaduzenja> listaZaduzenja;  
-     Zaduzenje zaduzenje;
-    
+    List<StavkaZaduzenja> listaZaduzenja;
+    Zaduzenje zaduzenje;
+
     /**
      * Creates new form ZaduzenjaForm
      */
@@ -146,22 +146,22 @@ public class ZaduzenjaForm extends javax.swing.JFrame {
         Kontroler.getInstanca().posaljiZahtev(zahtev);
         Odgovor odgovor = Kontroler.getInstanca().primiOdgovor();
         boolean b = (boolean) odgovor.getOdgovor();
-        
-        if(b){
+
+        if (b) {
             JOptionPane.showMessageDialog(rootPane, "Stavka je uspesno sacuvana!");
             Zahtev zahtev2 = new Zahtev(zaduzenje, Operacija.DODAJ_BROJ_KNJIGA);
             Kontroler.getInstanca().posaljiZahtev(zahtev2);
             Odgovor odgovor2 = Kontroler.getInstanca().primiOdgovor();
-            boolean b1 = (boolean) odgovor.getOdgovor();
-            if(b1){
+            Zaduzenje zad = (Zaduzenje) odgovor.getOdgovor();
+            if (zad!=null) {
+                zaduzenje = zad;
                 System.out.println("Uspesno podesen broj knjiga!");
-            }
-            else{
+            } else {
                 System.out.println("Nije uspesno podesen broj knjiga!");
             }
             return;
         }
-        
+
         JOptionPane.showMessageDialog(rootPane, "Stavka nije uspesno kreirana!");
 
     }//GEN-LAST:event_btnKreirajStavkuActionPerformed
@@ -174,31 +174,30 @@ public class ZaduzenjaForm extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public void kreirajZaduzenje(){
-        
+    public void kreirajZaduzenje() {
+
         Zaduzenje zad = new Zaduzenje(-1l, LocalDate.now(), LocalDate.now().plusDays(20), 0, clan);
-        Zahtev zahtev = new Zahtev(zad, Operacija.DODAJ_ZADUZENJE);
+        Zahtev zahtev = new Zahtev(zad, Operacija.KREIRAJ_ZADUZENJE);
         Kontroler.getInstanca().posaljiZahtev(zahtev);
         Odgovor odgovor = Kontroler.getInstanca().primiOdgovor();
         boolean b = (boolean) odgovor.getOdgovor();
-        if(b){
+        if (b) {
             System.out.println("Zaduzenje uspesno kreirano!");
             return;
         }
         System.out.println("Zaduzenje nije uspesno kreirano!");
-        
+
     }
-    
-    
-    public Zaduzenje vratiZaduzenje(){
-        
+
+    public Zaduzenje vratiZaduzenje() {
+
         Zaduzenje zad = new Zaduzenje(-1l, LocalDate.now(), LocalDate.now().plusDays(20), 0, clan);
-        Zahtev zahtev = new Zahtev(zad, Operacija.VRATI_ZADUZENJE);
+        Zahtev zahtev = new Zahtev(zad, Operacija.VRATI_POSLEDNJE_ZADUZENJE);
         Kontroler.getInstanca().posaljiZahtev(zahtev);
         Odgovor odgovor = Kontroler.getInstanca().primiOdgovor();
-        
+
         return (Zaduzenje) odgovor.getOdgovor();
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
