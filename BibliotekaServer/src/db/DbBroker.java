@@ -326,25 +326,7 @@ public class DbBroker {
         return null;
     }
 
-    public synchronized Zaduzenje vratiZaduzenjeBezPK(Zaduzenje zaduzenje) {
-
-        String query = "SELECT * FROM zaduzenje WHERE datum_pocetka_zaduzenja = ? AND datum_zavrsetka_zaduzenja = ? AND"
-                + " broj_knjiga = ? AND sifra_clana = ?";
-        try {
-            PreparedStatement ps = connection.prepareStatement(query);
-            ps.setDate(1, Date.valueOf(zaduzenje.getDatumPocetkaZaduzenja()));
-            ps.setDate(2, Date.valueOf(zaduzenje.getDatumZavrsetkaZaduzenja()));
-            ps.setInt(3, zaduzenje.getBrojKnjiga());
-            ps.setLong(4, zaduzenje.getSifraZaduzenja());
-            ResultSet rs = ps.executeQuery();
-            List<OpstiDomenskiObjekat> lista = zaduzenje.konvertujRSUListu(rs);
-            return (Zaduzenje) lista.get(0);
-        } catch (SQLException ex) {
-            Logger.getLogger(DbBroker.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return null;
-    }
+    
 
     public synchronized Zaduzenje updateBrojKnjigaZaduzenje(Zaduzenje zad) {
 
@@ -397,7 +379,6 @@ public class DbBroker {
     public boolean knjigaZauzeta(StavkaZaduzenja s) {
 
         String query = "UPDATE knjiga SET je_zauzeta = TRUE WHERE sifra_knjige = " + s.getKnjiga().getSifraKnjige();
-        System.out.println("&&&&&&&&&&&&&&&&&&: " + query);
         try {
             DbBroker.getInstanca().uspostaviKonekciju();
             Statement statement = connection.createStatement();
@@ -437,12 +418,10 @@ public class DbBroker {
 
         uspostaviKonekciju();
         String query = "SELECT * FROM knjiga WHERE sifra_knjige = " + knjiga.getSifraKnjige() + " AND je_zauzeta = TRUE";
-        System.out.println("query: " + query);
         try {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
             List<OpstiDomenskiObjekat> lista = knjiga.konvertujRSUListu(rs);
-            System.out.println("&&&&&&&&&&& lista.size " + lista.size());
             zatvoriKonekciju();
             if (lista.size() > 0) {
                 return false;

@@ -271,7 +271,7 @@ public class Kontroler {
         return zaduzenje;
     }
 
-     public synchronized boolean updateZaduzenjeRok(Zaduzenje zad) {
+    public synchronized boolean updateZaduzenjeRok(Zaduzenje zad) {
 
         DbBroker.getInstanca().uspostaviKonekciju();
         boolean b;
@@ -286,40 +286,16 @@ public class Kontroler {
 
         return false;
     }
-     
-    public synchronized List<StavkaZaduzenja> vratiStavkeZaduzenja(Zaduzenje zaduzenje){
-        
+
+    public synchronized List<StavkaZaduzenja> vratiStavkeZaduzenja(Zaduzenje zaduzenje) {
+
         DbBroker.getInstanca().uspostaviKonekciju();
         List<StavkaZaduzenja> stavkaZaduzenje = DbBroker.getInstanca().vratiStavkeZaduzenja(zaduzenje);
         DbBroker.getInstanca().zatvoriKonekciju();
         return stavkaZaduzenje;
-        
-    }
-    public List<Clan> vratiClanove(Clan clan) {
-
-        List<OpstiDomenskiObjekat> lista;
-        try {
-            DbBroker.getInstanca().uspostaviKonekciju();
-            lista = DbBroker.getInstanca().vratiOpsteDomenskeObjekte(clan);
-            List<Clan> clanovi = new ArrayList<>();
-
-            for (OpstiDomenskiObjekat o : lista) {
-
-                Clan c = (Clan) o;
-                clanovi.add(c);
-
-            }
-            DbBroker.getInstanca().zatvoriKonekciju();
-
-            return clanovi;
-
-        } catch (SQLException ex) {
-            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return null;
 
     }
+
 
     public synchronized List<OpstiDomenskiObjekat> vratiSvaZaduzenja() {
 
@@ -340,35 +316,20 @@ public class Kontroler {
         return null;
     }
 
-    public synchronized boolean sacuvajStavkeZaduzenja(List<StavkaZaduzenja> stavke) {
-
-        for (StavkaZaduzenja s : stavke) {
-
-            try {
-                DbBroker.getInstanca().sacuvajOpstiDomenskiObjekat(s);
-            } catch (SQLException ex) {
-                System.out.println("Nije moguce sacuvati stavku!");
-                return false;
-            }
-
-        }
-        System.out.println("Stavke su uspesno sacuvane!");
-        return true;
-    }
+    
 
     public synchronized boolean sacuvajStavkuZaduzenja(StavkaZaduzenja stavka) {
 
-        
         try {
             DbBroker.getInstanca().uspostaviKonekciju();
             Knjiga knjiga = (Knjiga) DbBroker.getInstanca().vratiOpstiDomenskiObjekatPrimarniKljuc(new Knjiga(), stavka.getKnjiga().getSifraKnjige());
-            if(knjiga == null){
+            if (knjiga == null) {
                 System.out.println("Knjiga ne postoji!");
                 return false;
             }
             stavka.setKnjiga(knjiga);
-            if(stavka.getKnjiga().isJeZauzeta()){
-                System.out.println("!!!!!!!!!!!!!!!!!!!!! " + "Knjiga je zauzeta");
+            if (stavka.getKnjiga().isJeZauzeta()) {
+                System.out.println("Knjiga je zauzeta");
                 return false;
             }
             boolean b = DbBroker.getInstanca().sacuvajOpstiDomenskiObjekat(stavka);
@@ -381,10 +342,9 @@ public class Kontroler {
         }
         return false;
     }
-    
-    
-    public synchronized boolean obrisiZaduzenje(Zaduzenje zaduzenje){
-        
+
+    public synchronized boolean obrisiZaduzenje(Zaduzenje zaduzenje) {
+
         DbBroker.getInstanca().uspostaviKonekciju();
         try {
             boolean b = DbBroker.getInstanca().obrisiOpstiDomenskiObjekat(zaduzenje);
@@ -394,15 +354,13 @@ public class Kontroler {
             System.out.println("Nije moguce obrisati zaduzenje!");
             return false;
         }
-        
+
     }
 
-    public synchronized void obrisiKorisnika(Korisnik korisnik){
-        
+    public synchronized void obrisiKorisnika(Korisnik korisnik) {
+
         ListaPrijavljenih.getInstanca().obrisi(korisnik);
-        
-        
+
     }
-            
 
 }
