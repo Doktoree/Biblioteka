@@ -152,7 +152,8 @@ public class ZaduzenjaForm extends javax.swing.JFrame {
             Zahtev zahtev2 = new Zahtev(zaduzenje, Operacija.DODAJ_BROJ_KNJIGA);
             Kontroler.getInstanca().posaljiZahtev(zahtev2);
             Odgovor odgovor2 = Kontroler.getInstanca().primiOdgovor();
-            Zaduzenje zad = (Zaduzenje) odgovor.getOdgovor();
+            System.out.println("Vidi se da ga ne cistis: "  + odgovor2.getOdgovor());
+            Zaduzenje zad = (Zaduzenje) odgovor2.getOdgovor();
             if (zad!=null) {
                 zaduzenje = zad;
                 System.out.println("Uspesno podesen broj knjiga!");
@@ -168,6 +169,18 @@ public class ZaduzenjaForm extends javax.swing.JFrame {
 
     private void btnZatvoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZatvoriActionPerformed
         // TODO add your handling code here:
+        if(zaduzenje.getBrojKnjiga()==0){
+            Zahtev zahtev = new Zahtev(zaduzenje, Operacija.OBRISI_ZADUZENJE);
+            Kontroler.getInstanca().posaljiZahtev(zahtev);
+            Odgovor odgovor = Kontroler.getInstanca().primiOdgovor();
+            boolean b = (boolean) odgovor.getOdgovor();
+            if(b){
+                System.out.println("Uspesno obrisano prazno zaduzenje!");
+            }
+            else{
+                System.out.println("Nije uspesno obrisano zaduzenje!");
+            }
+        }
         dispose();
     }//GEN-LAST:event_btnZatvoriActionPerformed
 

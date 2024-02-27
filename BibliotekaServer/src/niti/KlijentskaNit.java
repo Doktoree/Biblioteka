@@ -161,6 +161,8 @@ public class KlijentskaNit extends Thread {
 
                 case DODAJ_BROJ_KNJIGA:
                     Zaduzenje zaduzenjeBrojKnjiga = (Zaduzenje) zahtev.getParametar();
+                    System.out.println("------------------------------------------");
+                    System.out.println("Broj knjiga: ");
                     odgovor.setOdgovor(Kontroler.getInstanca().updateBrojKnjigaZaduzenje(zaduzenjeBrojKnjiga));
                     break;
 
@@ -181,6 +183,11 @@ public class KlijentskaNit extends Thread {
                     } else {
                         odgovor.setOdgovor(false);
                     }
+                    break;
+                    
+                case OBRISI_ZADUZENJE:
+                    Zaduzenje zaduzenjeZaBrisanje = (Zaduzenje) zahtev.getParametar();
+                    odgovor.setOdgovor(Kontroler.getInstanca().obrisiZaduzenje(zaduzenjeZaBrisanje));
                     break;
             }
 

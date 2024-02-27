@@ -27,6 +27,7 @@ public class SOZapamtiZaduzenje extends OpstaSO{
     @Override
     protected void executeSpecificOperation() throws Exception {
         
+        System.out.println("+++++++++ " + zaduzenje.getBrojKnjiga());
         uspesno = DbBroker.getInstanca().sacuvajOpstiDomenskiObjekat(zaduzenje);
     }
 

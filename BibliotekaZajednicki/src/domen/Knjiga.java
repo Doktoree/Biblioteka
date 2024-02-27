@@ -109,7 +109,7 @@ public class Knjiga extends OpstiDomenskiObjekat {
                 Long sifra = rs.getLong("sifra_knjige");
                 String naziv = rs.getString("naziv_knjige");
                 String autor = rs.getString("autor_knjige");
-                int godina = rs.getInt("datum_izdavanja");
+                int godina = rs.getInt("godina");
                 boolean zauzeta = rs.getBoolean("je_zauzeta");
                 Knjiga knjiga = new Knjiga(sifra, naziv, autor, godina,zauzeta);
                 lista.add(knjiga);

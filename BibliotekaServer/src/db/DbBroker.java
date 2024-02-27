@@ -396,7 +396,8 @@ public class DbBroker {
 
     public boolean knjigaZauzeta(StavkaZaduzenja s) {
 
-        String query = "UPDATE knjiga SET je_zauzeta = false WHERE sifra_knjige = " + s.getKnjiga().getSifraKnjige();
+        String query = "UPDATE knjiga SET je_zauzeta = TRUE WHERE sifra_knjige = " + s.getKnjiga().getSifraKnjige();
+        System.out.println("&&&&&&&&&&&&&&&&&&: " + query);
         try {
             DbBroker.getInstanca().uspostaviKonekciju();
             Statement statement = connection.createStatement();
