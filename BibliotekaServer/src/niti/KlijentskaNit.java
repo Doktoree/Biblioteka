@@ -189,6 +189,10 @@ public class KlijentskaNit extends Thread {
                     Zaduzenje zaduzenjeZaBrisanje = (Zaduzenje) zahtev.getParametar();
                     odgovor.setOdgovor(Kontroler.getInstanca().obrisiZaduzenje(zaduzenjeZaBrisanje));
                     break;
+                 
+                case ODJAVA:
+                    Korisnik korisnikOdjava = (Korisnik) zahtev.getParametar();
+                    break;
             }
 
             posaljiOdgovor(odgovor);

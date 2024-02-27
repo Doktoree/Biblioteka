@@ -5,6 +5,7 @@
 package forme;
 
 import domen.Korisnik;
+import niti.VremeNit;
 
 /**
  *
@@ -13,6 +14,8 @@ import domen.Korisnik;
 public class BibliotekarForm extends javax.swing.JFrame {
 
     Korisnik korisnik;
+    VremeNit vremeNit;
+    
     
     /**
      * Creates new form BibliotekarForm
@@ -20,6 +23,8 @@ public class BibliotekarForm extends javax.swing.JFrame {
     public BibliotekarForm(Korisnik korisnik) {
         initComponents();
         this.korisnik = korisnik;
+        vremeNit = new VremeNit(lblDatum, lblVreme);
+        vremeNit.start();
     }
 
     /**
@@ -38,9 +43,9 @@ public class BibliotekarForm extends javax.swing.JFrame {
         jMenu4 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        lblVreme = new javax.swing.JLabel();
+        lblDatum = new javax.swing.JLabel();
+        btnOdjava = new javax.swing.JButton();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -65,14 +70,14 @@ public class BibliotekarForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("VREME");
+        lblVreme.setText("VREME");
 
-        jLabel2.setText("DATUM");
+        lblDatum.setText("DATUM");
 
-        jButton1.setText("Odjava");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnOdjava.setText("Odjava");
+        btnOdjava.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnOdjavaActionPerformed(evt);
             }
         });
 
@@ -130,23 +135,23 @@ public class BibliotekarForm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblDatum, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblVreme, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(15, 15, 15))
             .addGroup(layout.createSequentialGroup()
                 .addGap(176, 176, 176)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnOdjava, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(186, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(34, 34, 34)
-                .addComponent(jLabel1)
+                .addComponent(lblVreme)
                 .addGap(28, 28, 28)
-                .addComponent(jLabel2)
+                .addComponent(lblDatum)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(btnOdjava)
                 .addGap(20, 20, 20))
         );
 
@@ -182,10 +187,10 @@ public class BibliotekarForm extends javax.swing.JFrame {
         new PretragaClanovaForm2().setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnOdjavaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOdjavaActionPerformed
         // TODO add your handling code here:
         dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnOdjavaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -193,9 +198,7 @@ public class BibliotekarForm extends javax.swing.JFrame {
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton btnOdjava;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -210,5 +213,7 @@ public class BibliotekarForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JLabel lblDatum;
+    private javax.swing.JLabel lblVreme;
     // End of variables declaration//GEN-END:variables
 }

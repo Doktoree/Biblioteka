@@ -31,6 +31,7 @@ public enum Operacija implements Serializable{
     KNJIGA_NIJE_AKTIVNA,
     VRATI_STAVKE,
     OBRISI_ZADUZENJE,
+    ODJAVA
 
     
 }

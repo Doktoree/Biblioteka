@@ -397,6 +397,12 @@ public class Kontroler {
         
     }
 
-   
+    public synchronized void obrisiKorisnika(Korisnik korisnik){
+        
+        ListaPrijavljenih.getInstanca().obrisi(korisnik);
+        
+        
+    }
+            
 
 }
