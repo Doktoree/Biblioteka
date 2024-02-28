@@ -29,7 +29,6 @@ public class SONadjiKnjige extends OpstaSO {
     @Override
     protected void executeSpecificOperation() throws Exception {
 
-        
         knjige = DbBroker.getInstanca().vratiOpsteDomenskeObjekte(new Knjiga());
         for (OpstiDomenskiObjekat o : knjige) {
 
@@ -41,8 +40,6 @@ public class SONadjiKnjige extends OpstaSO {
 
         }
 
-        
-
     }
 
     private boolean vratiPoUslovu(Knjiga k) {
@@ -52,74 +49,15 @@ public class SONadjiKnjige extends OpstaSO {
 
         }
 
-        if (!knjiga.getNazivKnjige().isEmpty() && knjiga.getNazivKnjige().equalsIgnoreCase(k.getNazivKnjige())) {
-            if (!knjiga.getAutorKnjige().isEmpty()) {
-                if (knjiga.getAutorKnjige().equalsIgnoreCase(k.getAutorKnjige())) {
-                    if (knjiga.getGodina() != -1) {
-                        if (knjiga.getGodina() == k.getGodina()) {
-                            return true;
-                        }
-                        return false;
-                    }
-                    return true;
-                }
-                return false;
-            }
-
-            if (knjiga.getGodina() != -1) {
-                if (knjiga.getGodina() == k.getGodina()) {
-                    return true;
-                }
-                return false;
-            }
-            return true;
+        if (!knjiga.getNazivKnjige().isEmpty() && !knjiga.getNazivKnjige().equalsIgnoreCase(k.getNazivKnjige())) {
+            return false;
+        } else if (!knjiga.getAutorKnjige().isEmpty() && !knjiga.getAutorKnjige().equalsIgnoreCase(k.getAutorKnjige())) {
+            return false;
+        } else if (knjiga.getGodina() != -1 && knjiga.getGodina() != k.getGodina()) {
+            return false;
         }
 
-        if (!knjiga.getAutorKnjige().isEmpty() && knjiga.getAutorKnjige().equalsIgnoreCase(k.getAutorKnjige())) {
-            if (!knjiga.getNazivKnjige().isEmpty()) {
-                if (knjiga.getNazivKnjige().equalsIgnoreCase(k.getNazivKnjige())) {
-                    if (knjiga.getGodina() != -1) {
-                        if (knjiga.getGodina() == k.getGodina()) {
-                            return true;
-                        }
-                        return false;
-                    }
-                    return true;
-                }
-                return false;
-            }
-
-            if (knjiga.getGodina() != -1) {
-                if (knjiga.getGodina() == k.getGodina()) {
-                    return true;
-                }
-                return false;
-            }
-            return true;
-        }
-        
-        if (knjiga.getGodina() !=-1 && knjiga.getGodina() == k.getGodina()) {
-            if (!knjiga.getAutorKnjige().isEmpty()) {
-                if (knjiga.getAutorKnjige().equalsIgnoreCase(k.getAutorKnjige())) {
-                    if (!knjiga.getNazivKnjige().isEmpty()) {
-                        return knjiga.getNazivKnjige().equalsIgnoreCase(k.getNazivKnjige());
-                    }
-                    return true;
-                }
-                return false;
-            }
-
-            if (!knjiga.getNazivKnjige().isEmpty()) {
-                if (knjiga.getNazivKnjige().equalsIgnoreCase(k.getNazivKnjige())) {
-                    return true;
-                }
-                return false;
-            }
-            return true;
-        }
-        
-
-        return false;
+        return true;
     }
 
     public List<OpstiDomenskiObjekat> getRezultat() {

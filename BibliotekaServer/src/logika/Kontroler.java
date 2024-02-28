@@ -191,7 +191,9 @@ public class Kontroler {
 
     public synchronized List<Clan> nadjiClanove(Clan clan) throws Exception {
 
+        DbBroker.getInstanca().uspostaviKonekciju();
         List<OpstiDomenskiObjekat> clanovi = DbBroker.getInstanca().vratiOpsteDomenskeObjekte(new Clan());
+        DbBroker.getInstanca().zatvoriKonekciju();
         SONadjiClanove soNadjiClanove = new SONadjiClanove(clanovi, clan);
         soNadjiClanove.executeOperation();
         return soNadjiClanove.getClanovi();

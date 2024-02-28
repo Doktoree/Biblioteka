@@ -206,7 +206,7 @@ public class DbBroker {
             List<OpstiDomenskiObjekat> zaduzenja = new Zaduzenje().konvertujRSUListu(rs);
             System.out.println("Uspesno vraceno poslednje zaduzenje!");
             zatvoriKonekciju();
-            return (Zaduzenje)zaduzenja.get(0);
+            return (Zaduzenje) zaduzenja.get(0);
         } catch (SQLException ex) {
             System.out.println("Nije moguce vratiti poslednje zaduzenje!");
             Logger.getLogger(DbBroker.class.getName()).log(Level.SEVERE, null, ex);
@@ -325,8 +325,6 @@ public class DbBroker {
 
         return null;
     }
-
-    
 
     public synchronized Zaduzenje updateBrojKnjigaZaduzenje(Zaduzenje zad) {
 

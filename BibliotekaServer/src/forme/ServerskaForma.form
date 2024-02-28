@@ -26,18 +26,18 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <Component id="jLabel1" min="-2" pref="134" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
                       <Component id="lblStatus" min="-2" pref="183" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <Component id="btnPokreniServer" min="-2" pref="148" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
                       <Component id="btnZaustavi" min="-2" pref="164" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="109" max="32767" attributes="0"/>
+              <EmptySpace pref="39" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
