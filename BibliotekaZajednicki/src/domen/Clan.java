@@ -126,17 +126,11 @@ public class Clan extends OpstiDomenskiObjekat {
             while (rs.next()) {
 
                 Long sifra = rs.getLong("sifra_clana");
-                System.out.println("Ovde 1");
                 String ime = rs.getString("ime_clana");
-                System.out.println("Ovde 2");
                 String prezime = rs.getString("prezime_clana");
-                System.out.println("Ovde 3");
                 String adresa = rs.getString("adresa_clana");
-                System.out.println("Ovde 4");
                 String telefon = rs.getString("broj_telefona_clana");
-                System.out.println("Ovde 5");
                 LocalDate datum = rs.getDate("datum_rodjenja_clana").toLocalDate();
-                System.out.println("Ovde 6");
                 Clan clan = new Clan(sifra, ime, prezime, adresa, telefon, datum);
                 clanovi.add(clan);
 
