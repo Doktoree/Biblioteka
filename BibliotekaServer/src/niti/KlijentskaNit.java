@@ -176,13 +176,9 @@ public class KlijentskaNit extends Thread {
                     odgovor.setOdgovor(Kontroler.getInstanca().vratiStavkeZaduzenja(zaduzenjeVratiStavku));
                     break;
 
-                case KNJIGA_NIJE_AKTIVNA:
+                case VRATI_KNJIGU:
                     StavkaZaduzenja stavkaAktivna = (StavkaZaduzenja) zahtev.getParametar();
-                    if (DbBroker.getInstanca().knjigaZauzeta(stavkaAktivna) && DbBroker.getInstanca().promeniStavkuNeAktivna(stavkaAktivna)) {
-                        odgovor.setOdgovor(true);
-                    } else {
-                        odgovor.setOdgovor(false);
-                    }
+                    odgovor.setOdgovor(Kontroler.getInstanca().vratiKnjigu(stavkaAktivna));
                     break;
                     
                 case OBRISI_ZADUZENJE:
@@ -192,6 +188,7 @@ public class KlijentskaNit extends Thread {
                  
                 case ODJAVA:
                     Korisnik korisnikOdjava = (Korisnik) zahtev.getParametar();
+                    Kontroler.getInstanca().obrisiKorisnika(korisnikOdjava);
                     break;
             }
 

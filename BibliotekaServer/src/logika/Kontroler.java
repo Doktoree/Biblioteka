@@ -298,7 +298,6 @@ public class Kontroler {
 
     }
 
-
     public synchronized List<OpstiDomenskiObjekat> vratiSvaZaduzenja() {
 
         List<OpstiDomenskiObjekat> lista;
@@ -318,8 +317,6 @@ public class Kontroler {
         return null;
     }
 
-    
-
     public synchronized boolean sacuvajStavkuZaduzenja(StavkaZaduzenja stavka) {
 
         try {
@@ -337,7 +334,7 @@ public class Kontroler {
             boolean b = DbBroker.getInstanca().sacuvajOpstiDomenskiObjekat(stavka);
             DbBroker.getInstanca().commit();
             DbBroker.getInstanca().zatvoriKonekciju();
-            DbBroker.getInstanca().knjigaZauzeta(stavka);
+            DbBroker.getInstanca().knjigaZauzeta(stavka, true);
             return b;
         } catch (SQLException ex) {
             Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
@@ -365,4 +362,20 @@ public class Kontroler {
 
     }
 
+    public synchronized boolean vratiKnjigu(StavkaZaduzenja stavka) {
+
+        boolean b = DbBroker.getInstanca().knjigaZauzeta(stavka, false);
+        if (!b) {
+            return false;
+        }
+
+        return DbBroker.getInstanca().promeniStavkuNeAktivna(stavka);
+
+    }
+
+    public synchronized void odjavaKorisnika(Korisnik korisnik){
+        
+        ListaPrijavljenih.getInstanca().obrisi(korisnik);
+        
+    }
 }
