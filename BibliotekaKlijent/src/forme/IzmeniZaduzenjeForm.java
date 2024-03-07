@@ -32,7 +32,7 @@ public class IzmeniZaduzenjeForm extends javax.swing.JFrame {
         listaStavki = new ArrayList<>();
         popuniPolja();
         popuniCombo();
-        setDefaultCloseOperation(EXIT_ON_CLOSE);        
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);        
     }
 
     /**
@@ -269,7 +269,7 @@ public class IzmeniZaduzenjeForm extends javax.swing.JFrame {
           
       }
       
-      Zahtev zahtev = new Zahtev(stavka, Operacija.KNJIGA_NIJE_AKTIVNA);
+      Zahtev zahtev = new Zahtev(stavka, Operacija.VRATI_KNJIGU);
       Kontroler.getInstanca().posaljiZahtev(zahtev);
       Odgovor odgovor = Kontroler.getInstanca().primiOdgovor();
       boolean b = (boolean) odgovor.getOdgovor();
