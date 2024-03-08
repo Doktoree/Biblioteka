@@ -4,8 +4,10 @@
  */
 package forme;
 
+import domen.Korisnik;
 import java.awt.Color;
 import logika.Kontroler;
+import model.PrijavljeniKorisniciModel;
 import niti.PokretanjeServera;
 
 /**
@@ -20,6 +22,8 @@ public class ServerskaForma extends javax.swing.JFrame {
      */
     public ServerskaForma() {
         initComponents();
+        Kontroler.getInstanca().setSf(this);
+        formirajTabelu();
     }
 
     /**
@@ -35,6 +39,9 @@ public class ServerskaForma extends javax.swing.JFrame {
         lblStatus = new javax.swing.JLabel();
         btnPokreniServer = new javax.swing.JButton();
         btnZaustavi = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblPrijavljeni = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -61,6 +68,22 @@ public class ServerskaForma extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setText("Prijavljeni korisnici:");
+
+        tblPrijavljeni.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Korisnicko ime", "Ime", "Prezime"
+            }
+        ));
+        jScrollPane1.setViewportView(tblPrijavljeni);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -70,13 +93,16 @@ public class ServerskaForma extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(63, 63, 63)
+                        .addGap(85, 85, 85)
                         .addComponent(lblStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnPokreniServer, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(57, 57, 57)
-                        .addComponent(btnZaustavi, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(39, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(btnPokreniServer, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(79, 79, 79)
+                            .addComponent(btnZaustavi, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -89,7 +115,11 @@ public class ServerskaForma extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnPokreniServer)
                     .addComponent(btnZaustavi))
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addGap(32, 32, 32)
+                .addComponent(jLabel2)
+                .addGap(30, 30, 30)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(46, Short.MAX_VALUE))
         );
 
         pack();
@@ -120,11 +150,29 @@ public class ServerskaForma extends javax.swing.JFrame {
      * @param args the command line arguments
      */
    
-
+    public void formirajTabelu(){
+        
+        PrijavljeniKorisniciModel model = new PrijavljeniKorisniciModel();
+        tblPrijavljeni.setModel(model);
+        
+        
+    }
+    
+    public void updateTabelu(){
+        
+        PrijavljeniKorisniciModel model = new PrijavljeniKorisniciModel();
+        tblPrijavljeni.setModel(model);
+        
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPokreniServer;
     private javax.swing.JButton btnZaustavi;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblStatus;
+    private javax.swing.JTable tblPrijavljeni;
     // End of variables declaration//GEN-END:variables
 }

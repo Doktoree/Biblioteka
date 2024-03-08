@@ -188,7 +188,7 @@ public class KlijentskaNit extends Thread {
                  
                 case ODJAVA:
                     Korisnik korisnikOdjava = (Korisnik) zahtev.getParametar();
-                    Kontroler.getInstanca().obrisiKorisnika(korisnikOdjava);
+                    Kontroler.getInstanca().odjavaKorisnika(korisnikOdjava);
                     break;
             }
 

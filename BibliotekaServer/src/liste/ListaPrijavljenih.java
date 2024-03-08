@@ -41,9 +41,16 @@ public class ListaPrijavljenih {
             
             if(o.getSifraKorisnika() == k.getSifraKorisnika()){
                 prijavljeni.remove(o);
+                System.out.println("Korisnik je izbrisan iz liste korisnika!");
                 return;
             }
             
         }
     }
+
+    public List<Korisnik> getPrijavljeni() {
+        return prijavljeni;
+    }
+    
+    
 }

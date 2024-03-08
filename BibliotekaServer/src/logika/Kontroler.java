@@ -41,6 +41,7 @@ public class Kontroler {
 
     private static Kontroler instanca;
     private static PokretanjeServera ps;
+    private ServerskaForma sf;
 
     private Kontroler() {
     }
@@ -82,6 +83,12 @@ public class Kontroler {
 
     }
 
+    public void setSf(ServerskaForma sf) {
+        this.sf = sf;
+    }
+    
+    
+
     public synchronized List<OpstiDomenskiObjekat> nadjiKnjige(Knjiga knjiga) throws Exception {
 
         SONadjiKnjige soNadjiKnjige = new SONadjiKnjige(knjiga);
@@ -121,7 +128,9 @@ public class Kontroler {
 
         Korisnik rezultat = DbBroker.getInstanca().vratiKorisnika(korisnik);
         if (rezultat != null) {
-            ListaPrijavljenih.getInstanca().dodaj(korisnik);
+            ListaPrijavljenih.getInstanca().dodaj(rezultat);
+            sf.updateTabelu();
+            
         }
         return rezultat;
 
@@ -356,11 +365,7 @@ public class Kontroler {
 
     }
 
-    public synchronized void obrisiKorisnika(Korisnik korisnik) {
-
-        ListaPrijavljenih.getInstanca().obrisi(korisnik);
-
-    }
+    
 
     public synchronized boolean vratiKnjigu(StavkaZaduzenja stavka) {
 
@@ -376,6 +381,8 @@ public class Kontroler {
     public synchronized void odjavaKorisnika(Korisnik korisnik){
         
         ListaPrijavljenih.getInstanca().obrisi(korisnik);
+        System.out.println("Korisnik se odjvaljuje...");
+        sf.updateTabelu();
         
     }
 }
