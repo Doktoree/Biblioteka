@@ -67,6 +67,13 @@ public class Kontroler {
         
         return opsti;
     }
+    
+    public void zatvoriKonekciju() throws IOException{
+        
+        System.out.println("Soket se zatvara...");
+        soket.close();
+        
+    }
 
     public Odgovor primiOdgovor() {
 

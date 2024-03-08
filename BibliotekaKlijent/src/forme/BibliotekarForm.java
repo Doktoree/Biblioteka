@@ -5,7 +5,14 @@
 package forme;
 
 import domen.Korisnik;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import konstante.Operacija;
+import logika.Kontroler;
 import niti.VremeNit;
+import transfer.Odgovor;
+import transfer.Zahtev;
 
 /**
  *
@@ -189,7 +196,17 @@ public class BibliotekarForm extends javax.swing.JFrame {
 
     private void btnOdjavaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOdjavaActionPerformed
         // TODO add your handling code here:
-        dispose();
+        Zahtev zahtev = new Zahtev(korisnik, Operacija.ODJAVA);
+        Kontroler.getInstanca().posaljiZahtev(zahtev);
+        try {
+            Kontroler.getInstanca().zatvoriKonekciju();
+            System.exit(0);
+        } catch (IOException ex) {
+            System.out.println("Nije uspelo zatvranje soketa!");
+            Logger.getLogger(BibliotekarForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
+        
     }//GEN-LAST:event_btnOdjavaActionPerformed
 
     /**
