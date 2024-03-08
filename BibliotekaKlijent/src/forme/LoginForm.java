@@ -57,7 +57,7 @@ public class LoginForm extends javax.swing.JDialog {
             }
         });
 
-        btnIzadji.setText("Izadji");
+        btnIzadji.setText("Zatvori");
         btnIzadji.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIzadjiActionPerformed(evt);
